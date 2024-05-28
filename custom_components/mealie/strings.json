@@ -1,0 +1,38 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "description": "Login with your control account (e.g. abc@a) and password",
+                "data": {
+                    "username": "Username",
+                    "password": "Password"
+                }
+            },
+            "reauth_confirm": {
+                "title": "Mealie - Reauthentication",
+                "description": "Your account is unable to authenticate. Click Submit to re-setup."
+            }
+        },
+        "abort": {
+            "already_configured": "Only one instance of Mealie is allowed",
+            "single_instance_allowed": "Only one instance of Mealie is allowed",
+            "reauth_successful": "Reauthentication Successful"
+        },
+        "error": {
+            "Control authorisation failed": "Control authorisation failed.",
+            "Bad control-login": "Bad control-login.",
+            "no_connection": "Unable to connect to the server.",
+            "unknown": "Unknown error occurred."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "monthly_quota": {
+                "name": "Monthly Quota"
+            },
+            "quota_remaining": {
+                "name": "Quota Remaining"
+            }
+        }
+    }
+}

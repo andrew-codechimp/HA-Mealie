@@ -1,0 +1,15 @@
+{
+  "domain": "mealie",
+  "name": "Mealie",
+  "codeowners": [
+    "@andrew-codechimp"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/andrew-codechimp/HA-Mealie",
+  "integration_type": "device",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/andrew-codechimp/HA-Mealie/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}
