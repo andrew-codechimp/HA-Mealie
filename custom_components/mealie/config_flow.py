@@ -48,16 +48,18 @@ class MealieConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             api = MealieApiClient(
-                async_get_clientsession(self.hass),
                 user_input[CONF_HOST],
                 user_input[CONF_TOKEN],
+                async_get_clientsession(self.hass),
             )
 
-            conn, errorcode = await api.connection_test()
+            result = await api.async_get_groups()
 
-            if conn is False:
-                errors["base"] = errorcode
-                LOGGER.error("Mealie connection error (%s)", errorcode)
+            print(result)
+
+            # if conn is False:
+            #     errors["base"] = errorcode
+            #     LOGGER.error("Mealie connection error (%s)", errorcode)
 
             # Save instance
             if not errors:

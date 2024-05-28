@@ -27,7 +27,7 @@ from .const import DOMAIN, LOGGER, MIN_HA_VERSION
 from .coordinator import MealieDataUpdateCoordinator
 
 PLATFORMS: list[Platform] = [
-    Platform.SENSOR,
+    Platform.TODO,
 ]
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
@@ -69,10 +69,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         token=entry.data[CONF_TOKEN],
     )
 
-    conn, errorcode = await client.connection_test()
+    result = await client.async_get_groups()
 
-    if conn is False:
-        raise ConfigEntryAuthFailed("Unable to login, please re-login.") from None
+    print(result)
+
+    # conn, errorcode = await client.connection_test()
+
+    # if conn is False:
+    #     raise ConfigEntryAuthFailed("Unable to login, please re-login.") from None
 
     hass.data[DOMAIN][entry.entry_id] = coordinator = MealieDataUpdateCoordinator(
         hass=hass,
