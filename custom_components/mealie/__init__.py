@@ -22,8 +22,6 @@ from homeassistant.const import (
     CONF_TOKEN,
 )
 
-from .config_flow import CONFIG_VERSION
-
 from .api import MealieApiClient
 from .const import DOMAIN, LOGGER, MIN_HA_VERSION
 from .coordinator import MealieDataUpdateCoordinator
