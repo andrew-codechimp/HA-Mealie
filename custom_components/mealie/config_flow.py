@@ -10,8 +10,8 @@ from homeassistant import config_entries
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from homeassistant.const import (
-    CONF_PASSWORD,
-    CONF_USERNAME,
+    CONF_HOST,
+    CONF_TOKEN,
 )
 
 from .api import MealieApiClient
@@ -20,12 +20,12 @@ from .const import DOMAIN, LOGGER
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_USERNAME): str,
-        vol.Required(CONF_PASSWORD): str,
+        vol.Required(CONF_HOST): str,
+        vol.Required(CONF_TOKEN): str,
     }
 )
 
-CONFIG_VERSION = 2
+CONFIG_VERSION = 1
 
 
 class MealieConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -49,8 +49,8 @@ class MealieConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             api = MealieApiClient(
                 async_get_clientsession(self.hass),
-                user_input[CONF_USERNAME],
-                user_input[CONF_PASSWORD],
+                user_input[CONF_HOST],
+                user_input[CONF_TOKEN],
             )
 
             conn, errorcode = await api.connection_test()

@@ -18,8 +18,8 @@ from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.const import __version__ as HA_VERSION  # noqa: N812
 
 from homeassistant.const import (
-    CONF_PASSWORD,
-    CONF_USERNAME,
+    CONF_HOST,
+    CONF_TOKEN,
 )
 
 from .config_flow import CONFIG_VERSION
@@ -59,16 +59,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     session = async_get_clientsession(hass)
 
-    if CONF_USERNAME not in entry.data or CONF_PASSWORD not in entry.data:
+    if CONF_HOST not in entry.data or CONF_TOKEN not in entry.data:
         raise ConfigEntryAuthFailed("Unable to login, please re-login.") from None
 
-    if entry.data[CONF_USERNAME] == "" or entry.data[CONF_PASSWORD] == "":
+    if entry.data[CONF_HOST] == "" or entry.data[CONF_TOKEN] == "":
         raise ConfigEntryAuthFailed("Unable to login, please re-login.") from None
 
     client = MealieApiClient(
         session=session,
-        username=entry.data[CONF_USERNAME],
-        password=entry.data[CONF_PASSWORD],
+        host=entry.data[CONF_HOST],
+        token=entry.data[CONF_TOKEN],
     )
 
     conn, errorcode = await client.connection_test()

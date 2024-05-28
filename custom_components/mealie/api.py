@@ -1,97 +1,76 @@
 """Mealie API Client."""
 
-from __future__ import annotations
-from typing import Any
+import asyncio
+import logging
+import socket
 
 import aiohttp
-from asyncio import timeout
+import async_timeout
 
-from .const import LOGGER, API_URL
+TIMEOUT = 10
+
+
+_LOGGER: logging.Logger = logging.getLogger(__package__)
+
+HEADERS = {"Content-type": "application/json; charset=UTF-8"}
 
 
 class MealieApiClient:
-    """Mealie API Client."""
-
     def __init__(
-        self,
-        session: aiohttp.ClientSession,
-        username: str,
-        password: str,
+        self, host: str, token: str, session: aiohttp.ClientSession
     ) -> None:
-        """Mealie API Client."""
-        self._url = API_URL
+        """Sample API Client."""
+        self._host = host
+        self._token = token
         self._session = session
-        self._username = username
-        self._password = password
 
-        self._connected = False
-        self._error = ""
+    async def async_get_data(self) -> dict:
+        """Get data from the API."""
+        url = "https://jsonplaceholder.typicode.com/posts/1"
+        return await self.api_wrapper("get", url)
 
-    async def connection_test(self) -> tuple:
-        """Test connection."""
-        await self.query("quota")
+    async def async_set_title(self, value: str) -> None:
+        """Get data from the API."""
+        url = "https://jsonplaceholder.typicode.com/posts/1"
+        await self.api_wrapper("patch", url, data={"title": value}, headers=HEADERS)
 
-        return self._connected, self._error
-
-    async def query(self, service: str, params: dict[str, Any] = None) -> any:
+    async def api_wrapper(
+        self, method: str, url: str, data: dict = {}, headers: dict = {}
+    ) -> dict:
         """Get information from the API."""
-
-        if params is None:
-            params = {}
-
-        error = False
-
-        params["control_login"] = self._username
-        params["control_password"] = self._password
-
         try:
-            async with timeout(10):
-                response = await self._session.request(
-                    method="post",
-                    url=f"{self._url}{service}",
-                    data=params,
-                )
+            async with async_timeout.timeout(TIMEOUT, loop=asyncio.get_event_loop()):
+                if method == "get":
+                    response = await self._session.get(url, headers=headers)
+                    return await response.json()
 
-                if response.status == 200:
-                    data = await response.json()
-                    LOGGER.debug(
-                        "%s query response: %s",
-                        f"{self._url}{service}",
-                        data,
-                    )
+                elif method == "put":
+                    await self._session.put(url, headers=headers, json=data)
 
-                    if "error" in data:
-                        error = True
-                else:
-                    error = True
-        except Exception:  # pylint: disable=broad-exception-caught
-            error = True
+                elif method == "patch":
+                    await self._session.patch(url, headers=headers, json=data)
 
-        if error:
-            try:
-                if data and "error" in data:
-                    errorcode = data["error"]
-                else:
-                    errorcode = response.status
-            except Exception:  # pylint: disable=broad-exception-caught
-                errorcode = "no_connection"
+                elif method == "post":
+                    await self._session.post(url, headers=headers, json=data)
 
-            LOGGER.warning(
-                "%s unable to fetch data %s (%s)",
-                self._url,
-                service,
-                errorcode,
+        except asyncio.TimeoutError as exception:
+            _LOGGER.error(
+                "Timeout error fetching information from %s - %s",
+                url,
+                exception,
             )
 
-            self._error = errorcode
-            return None
-
-        self._connected = True
-        self._error = ""
-
-        return data
-
-    @property
-    def error(self):
-        """Return error."""
-        return self._error
+        except (KeyError, TypeError) as exception:
+            _LOGGER.error(
+                "Error parsing information from %s - %s",
+                url,
+                exception,
+            )
+        except (aiohttp.ClientError, socket.gaierror) as exception:
+            _LOGGER.error(
+                "Error fetching information from %s - %s",
+                url,
+                exception,
+            )
+        except Exception as exception:  # pylint: disable=broad-except
+            _LOGGER.error("Something really wrong happened! - %s", exception)
