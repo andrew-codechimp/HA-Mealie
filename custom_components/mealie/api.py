@@ -16,6 +16,8 @@ HEADERS = {"Content-type": "application/json; charset=UTF-8"}
 
 
 class MealieApiClient:
+    """API for Mealie."""
+
     def __init__(
         self, host: str, token: str, session: aiohttp.ClientSession
     ) -> None:

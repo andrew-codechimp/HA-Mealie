@@ -93,26 +93,6 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry):
     """Migrate old config."""
     new_version = CONFIG_VERSION
 
-    if config_entry.version == 1:
-        # Version 1 did not authenticate, add blank config data
-        LOGGER.debug("Migrating config entry from version %s", config_entry.version)
-
-        new_data = {**config_entry.data}
-        new_data[CONF_USERNAME] = ""
-        new_data[CONF_PASSWORD] = ""
-
-        config_entry.version = new_version
-
-        hass.config_entries.async_update_entry(
-            config_entry, title=config_entry.title, data=new_data
-        )
-
-        LOGGER.info(
-            "Entry %s successfully migrated to version %s.",
-            config_entry.entry_id,
-            new_version,
-        )
-
     return True
 
 
