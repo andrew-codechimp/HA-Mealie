@@ -23,6 +23,9 @@ class MealieApiClient:
         self._token = token
         self._session = session
 
+        self._connected = False
+        self._error = ""
+
     def _get_auth_headers(self) -> dict[str, str]:
         # headers = HEADERS
         # headers["Authorization"] = f"bearer {self._token}"
@@ -48,6 +51,7 @@ class MealieApiClient:
     async def api_wrapper(self, method: str, service: str, data: dict = {}) -> any:
         """Get information from the API."""
 
+        self._connected = False
         error = False
 
         url = self.http_normalize_slashes(service)
@@ -68,9 +72,8 @@ class MealieApiClient:
                             f"{self._host}{service}",
                             data,
                         )
-
-                        if "error" in data:
-                            error = True
+                    else:
+                        error = True
 
                 elif method == "put":
                     response = await self._session.put(
@@ -86,9 +89,8 @@ class MealieApiClient:
                             f"{self._host}{service}",
                             data,
                         )
-
-                        if "error" in data:
-                            error = True
+                    else:
+                        error = True
 
                 elif method == "post":
                     response = await self._session.post(
@@ -104,9 +106,8 @@ class MealieApiClient:
                             f"{self._host}{service}",
                             data,
                         )
-
-                        if "error" in data:
-                            error = True
+                    else:
+                        error = True
 
                 elif method == "delete":
                     response = await self._session.delete(
@@ -122,9 +123,8 @@ class MealieApiClient:
                             f"{self._host}{service}",
                             data,
                         )
-
-                        if "error" in data:
-                            error = True
+                    else:
+                        error = True
 
                 else:
                     error = True
@@ -133,10 +133,7 @@ class MealieApiClient:
 
         if error:
             try:
-                if data and "error" in data:
-                    errorcode = data["error"]
-                else:
-                    errorcode = response.status
+                errorcode = response.status
             except Exception:  # pylint: disable=broad-exception-caught
                 errorcode = "no_connection"
 

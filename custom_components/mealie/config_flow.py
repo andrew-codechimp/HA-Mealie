@@ -16,7 +16,11 @@ from homeassistant.const import (
 
 from .api import MealieApiClient
 
-from .const import DOMAIN, LOGGER
+from .const import (
+    DOMAIN,
+    LOGGER,
+    CONF_GROUP_ID,
+)
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
@@ -53,14 +57,15 @@ class MealieConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 async_get_clientsession(self.hass),
             )
 
-            result = await api.async_get_groups()
+            data = await api.async_get_groups()
 
-            # if conn is False:
-            #     errors["base"] = errorcode
-            #     LOGGER.error("Mealie connection error (%s)", errorcode)
+            if api.error:
+                errors["base"] = api.error
+                LOGGER.error("Mealie connection error (%s)", api.error)
 
             # Save instance
             if not errors:
+                user_input[CONF_GROUP_ID] = data.get("id")
                 if self._reauth_entry is None:
                     return self.async_create_entry(title="Mealie", data=user_input)
                 else:

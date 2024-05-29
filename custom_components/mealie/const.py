@@ -18,3 +18,4 @@ VERSION = manifest_data.get("version")
 ISSUEURL = manifest_data.get("issue_tracker")
 MANUFACTURER = "@Andrew-CodeChimp"
 
+CONF_GROUP_ID = "group_id"
