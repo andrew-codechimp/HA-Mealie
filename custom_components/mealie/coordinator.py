@@ -21,15 +21,18 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
 
     config_entry: ConfigEntry
 
-    quota = any
-
     def __init__(
         self,
         hass: HomeAssistant,
         client: MealieApiClient,
+        group_id: str,
     ) -> None:
         """Initialize."""
         self.client = client
+        self.group_id = group_id
+
+        self._shopping_lists: dict | None = None
+
         super().__init__(
             hass=hass,
             logger=LOGGER,
@@ -37,21 +40,27 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
             update_interval=timedelta(seconds=10),
         )
 
+    async def async_get_shopping_lists(self) -> dict:
+        """Return shopping lists  fetched at most once."""
+        if self._shopping_lists is None:
+
+            result = await self.client.async_get_shopping_lists(self.group_id)
+
+            self._shopping_lists = result.get("items")
+        return self._shopping_lists
+
     async def _async_update_data(self):
         """Update data."""
         try:
-            data = await self.client.query("quota")
-            if (
-                self.client.error == "Control authorisation failed"
-                or self.client.error == "Bad control-login"
-            ):
+            data = await self.client.async_get_shopping_lists(self.group_id)
+            if self.client.error:
                 raise ConfigEntryAuthFailed(
                     "Unable to login, please re-login."
                 ) from None
 
-            self.quota = data
+            self.shopping_lists = data
 
         except Exception as exception:
             raise UpdateFailed(exception) from exception
 
-        return self.quota
+        return self.shopping_lists

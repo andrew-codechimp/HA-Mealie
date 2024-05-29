@@ -22,8 +22,14 @@ from homeassistant.const import (
     CONF_TOKEN,
 )
 
+from .const import (
+    DOMAIN,
+    LOGGER,
+    MIN_HA_VERSION,
+    CONF_GROUP_ID,
+)
+
 from .api import MealieApiClient
-from .const import DOMAIN, LOGGER, MIN_HA_VERSION
 from .coordinator import MealieDataUpdateCoordinator
 
 PLATFORMS: list[Platform] = [
@@ -69,16 +75,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         session=session,
     )
 
-    result = await client.async_get_groups()
-
-    # conn, errorcode = await client.connection_test()
-
-    # if conn is False:
-    #     raise ConfigEntryAuthFailed("Unable to login, please re-login.") from None
-
     hass.data[DOMAIN][entry.entry_id] = coordinator = MealieDataUpdateCoordinator(
-        hass=hass,
-        client=client,
+        hass=hass, client=client, group_id=entry.data[CONF_GROUP_ID]
     )
 
     await coordinator.async_config_entry_first_refresh()
