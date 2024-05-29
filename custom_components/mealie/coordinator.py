@@ -32,6 +32,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
         self.group_id = group_id
 
         self._shopping_lists: dict | None = None
+        self.shopping_list_items: dict = {}
 
         super().__init__(
             hass=hass,
@@ -49,18 +50,40 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
             self._shopping_lists = result.get("items")
         return self._shopping_lists
 
+    async def async_get_shopping_lists_items(self, shopping_list_id) -> dict:
+        """Return shopping lists  fetched at most once."""
+        result = await self.client.async_get_shopping_list_items(
+            self.group_id, shopping_list_id
+        )
+
+        items = result.get("items")
+        return items
+
     async def _async_update_data(self):
         """Update data."""
-        try:
-            data = await self.client.async_get_shopping_lists(self.group_id)
-            if self.client.error:
-                raise ConfigEntryAuthFailed(
-                    "Unable to login, please re-login."
-                ) from None
 
-            self.shopping_lists = data
+        if not self._shopping_lists:
+            return
 
-        except Exception as exception:
-            raise UpdateFailed(exception) from exception
+        for value in self._shopping_lists:
+            shopping_list_id = value.get("id")
+            result = await self.client.async_get_shopping_list_items(
+                self.group_id, shopping_list_id
+            )
 
-        return self.shopping_lists
+            items = result.get("items")
+            self.shopping_list_items.update({shopping_list_id: items})
+
+        # try:
+        #     data = await self.client.async_get_shopping_lists(self.group_id)
+        #     if self.client.error:
+        #         raise ConfigEntryAuthFailed(
+        #             "Unable to login, please re-login."
+        #         ) from None
+
+        #     self.shopping_lists = data
+
+        # except Exception as exception:
+        #     raise UpdateFailed(exception) from exception
+
+        # return self.shopping_lists

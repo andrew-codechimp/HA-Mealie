@@ -46,7 +46,7 @@ class MealieApiClient:
         params["group_id"] = group_id
         params["queryFilter"] = f"shopping_list_id={shopping_list_id}"
 
-        return await self.api_wrapper("get", "/api/groups/shopping/lists", data=params)
+        return await self.api_wrapper("get", "/api/groups/shopping/items", data=params)
 
     async def api_wrapper(self, method: str, service: str, data: dict = {}) -> any:
         """Get information from the API."""

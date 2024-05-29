@@ -2,6 +2,8 @@
 
 from typing import cast
 
+from datetime import date, datetime, timedelta
+
 from homeassistant.components.todo import (
     TodoItem,
     TodoItemStatus,
@@ -16,6 +18,39 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
 from .coordinator import MealieDataUpdateCoordinator
+
+
+TODO_STATUS_MAP = {
+    False: TodoItemStatus.NEEDS_ACTION,
+    True: TodoItemStatus.COMPLETED,
+}
+TODO_STATUS_MAP_INV = {v: k for k, v in TODO_STATUS_MAP.items()}
+
+
+def _convert_api_item(item: dict[str, str]) -> TodoItem:
+    """Convert tasks API items into a TodoItem."""
+
+    return TodoItem(
+        summary=item["display"],
+        uid=item["id"],
+        status=TODO_STATUS_MAP.get(
+            item.get("checked", False),
+            TodoItemStatus.NEEDS_ACTION,
+        ),
+        due=None,
+        description=None,
+    )
+
+
+def _convert_todo_item(item: TodoItem) -> dict[str, str | None]:
+    """Convert TodoItem dataclass items to dictionary of attributes the tasks API."""
+    result: dict[str, str | None] = {}
+    result["display"] = item.summary
+    if item.status is not None:
+        result["checked"] = TODO_STATUS_MAP_INV[item.status]
+    else:
+        result["checked"] = TodoItemStatus.NEEDS_ACTION
+    return result
 
 
 async def async_setup_entry(
@@ -39,21 +74,6 @@ async def async_setup_entry(
         for shopping_list in shopping_lists
     )
 
-    # shopping_lists = coordinator.shopping_lists
-
-    # async_add_entities(
-    #     (
-    #         MealieTodoListEntity(
-    #             coordinator,
-    #             shopping_list.get("name"),
-    #             config_entry.entry_id,
-    #             shopping_list.get("id"),
-    #         )
-    #         for shopping_list in shopping_lists
-    #     ),
-    #     True,
-    # )
-
 
 class MealieTodoListEntity(
     CoordinatorEntity[MealieDataUpdateCoordinator], TodoListEntity
@@ -66,6 +86,7 @@ class MealieTodoListEntity(
         TodoListEntityFeature.CREATE_TODO_ITEM
         | TodoListEntityFeature.UPDATE_TODO_ITEM
         | TodoListEntityFeature.DELETE_TODO_ITEM
+        | TodoListEntityFeature.MOVE_TODO_ITEM
     )
 
     def __init__(
@@ -79,14 +100,18 @@ class MealieTodoListEntity(
         super().__init__(coordinator)
         self._attr_name = name
         self._attr_unique_id = f"{config_entry_id}-{list_id}"
-        self._task_list_id = list_id
+        self._shopping_list_id = list_id
 
     @property
     def todo_items(self) -> list[TodoItem] | None:
         """Get the current set of To-do items."""
-        # if self.coordinator.data is None:
-        #     return None
-        # return [_convert_api_item(item) for item in _order_tasks(self.coordinator.data)]
+
+        if self._shopping_list_id in self.coordinator.shopping_list_items:
+            return [
+                _convert_api_item(item)
+                for item in self.coordinator.shopping_list_items[self._shopping_list_id]
+            ]
+
         return []
 
     async def async_added_to_hass(self) -> None:
@@ -103,37 +128,41 @@ class MealieTodoListEntity(
         # if self.coordinator.data is None:
         # self._attr_todo_items = None
         # else:
-        #     items = []
-        #     for task in self.coordinator.data:
-        #         if task.project_id != self._project_id:
-        #             continue
-        #         if task.parent_id is not None:
-        #             # Filter out sub-tasks until they are supported by the UI.
-        #             continue
-        #         if task.is_completed:
-        #             status = TodoItemStatus.COMPLETED
-        #         else:
-        #             status = TodoItemStatus.NEEDS_ACTION
-        #         due: datetime.date | datetime.datetime | None = None
-        #         if task_due := task.due:
-        #             if task_due.datetime:
-        #                 due = dt_util.as_local(
-        #                     datetime.datetime.fromisoformat(task_due.datetime)
-        #                 )
-        #             elif task_due.date:
-        #                 due = datetime.date.fromisoformat(task_due.date)
-        #         items.append(
-        #             TodoItem(
-        #                 summary=task.content,
-        #                 uid=task.id,
-        #                 status=status,
-        #                 due=due,
-        #                 description=task.description or None,  # Don't use empty string
-        #             )
-        #         )
-        #     self._attr_todo_items = items
+        items = []
 
-        self._attr_todo_items = []
+        for item in self.coordinator.shopping_list_items[self._shopping_list_id]:
+
+            todo_item = _convert_api_item(item)
+            items.append(todo_item)
+            #     for task in self.coordinator.data:
+            #         if task.project_id != self._project_id:
+            #             continue
+            #         if task.parent_id is not None:
+            #             # Filter out sub-tasks until they are supported by the UI.
+            #             continue
+            #         if task.is_completed:
+            #             status = TodoItemStatus.COMPLETED
+            #         else:
+            #             status = TodoItemStatus.NEEDS_ACTION
+            #         due: datetime.date | datetime.datetime | None = None
+            #         if task_due := task.due:
+            #             if task_due.datetime:
+            #                 due = dt_util.as_local(
+            #                     datetime.datetime.fromisoformat(task_due.datetime)
+            #                 )
+            #             elif task_due.date:
+            #                 due = datetime.date.fromisoformat(task_due.date)
+            #         items.append(
+            #             TodoItem(
+            #                 summary=task.content,
+            #                 uid=task.id,
+            #                 status=status,
+            #                 due=due,
+            #                 description=task.description or None,  # Don't use empty string
+            #             )
+            #         )
+        self._attr_todo_items = items
+
         super()._handle_coordinator_update()
 
     #     await self._data.async_add(
