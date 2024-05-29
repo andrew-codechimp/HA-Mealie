@@ -64,14 +64,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         raise ConfigEntryAuthFailed("Unable to login, please re-login.") from None
 
     client = MealieApiClient(
-        session=session,
         host=entry.data[CONF_HOST],
         token=entry.data[CONF_TOKEN],
+        session=session,
     )
 
     result = await client.async_get_groups()
-
-    print(result)
 
     # conn, errorcode = await client.connection_test()
 
