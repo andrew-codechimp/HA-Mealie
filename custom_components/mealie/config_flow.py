@@ -55,8 +55,6 @@ class MealieConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
             result = await api.async_get_groups()
 
-            print(result)
-
             # if conn is False:
             #     errors["base"] = errorcode
             #     LOGGER.error("Mealie connection error (%s)", errorcode)

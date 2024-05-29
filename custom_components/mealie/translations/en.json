@@ -2,10 +2,10 @@
     "config": {
         "step": {
             "user": {
-                "description": "Login with your control account (e.g. abc@a) and password",
+                "description": "Enter your mealie address and API token for your account.",
                 "data": {
-                    "username": "Username",
-                    "password": "Password"
+                    "host": "Host",
+                    "token": "Token"
                 }
             },
             "reauth_confirm": {

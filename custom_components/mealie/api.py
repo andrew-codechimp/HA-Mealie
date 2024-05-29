@@ -50,11 +50,13 @@ class MealieApiClient:
 
         error = False
 
+        url = self.http_normalize_slashes(service)
+
         try:
             async with timeout(10):
                 if method == "get":
                     response = await self._session.get(
-                        url=f"{self._host}{service}",
+                        url=url,
                         params=data,
                         headers={"Authorization": f"bearer {self._token}"},
                     )
@@ -72,7 +74,7 @@ class MealieApiClient:
 
                 elif method == "put":
                     response = await self._session.put(
-                        url=f"{self._host}{service}",
+                        url=url,
                         json=data,
                         headers={"Authorization": f"bearer {self._token}"},
                     )
@@ -90,7 +92,7 @@ class MealieApiClient:
 
                 elif method == "post":
                     response = await self._session.post(
-                        url=f"{self._host}{service}",
+                        url=url,
                         json=data,
                         headers={"Authorization": f"bearer {self._token}"},
                     )
@@ -108,7 +110,7 @@ class MealieApiClient:
 
                 elif method == "delete":
                     response = await self._session.delete(
-                        url=f"{self._host}{service}",
+                        url=url,
                         json=data,
                         headers={"Authorization": f"bearer {self._token}"},
                     )
@@ -157,3 +159,17 @@ class MealieApiClient:
     def error(self):
         """Return error."""
         return self._error
+
+    def http_normalize_slashes(self, service):
+        url = f"{self._host}{service}"
+        segments = url.split("/")
+        correct_segments = []
+        for segment in segments:
+            if segment != "":
+                correct_segments.append(segment)
+        first_segment = str(correct_segments[0])
+        if first_segment.find("http") == -1:
+            correct_segments = ["http:"] + correct_segments
+        correct_segments[0] = correct_segments[0] + "/"
+        normalized_url = "/".join(correct_segments)
+        return normalized_url
