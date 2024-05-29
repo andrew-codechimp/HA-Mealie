@@ -49,14 +49,28 @@ class MealieApiClient:
         return await self.api_wrapper("get", "/api/groups/shopping/items", data=params)
 
     async def async_add_shopping_list_item(
-        self, shopping_list_id: str, summary: str
+        self, shopping_list_id: str, summary: str, position: int
     ) -> dict:
 
         data = {"isFood": "False", "checked": "False"}
         data["note"] = summary
         data["shoppingListId"] = shopping_list_id
+        data["position"] = position
 
         return await self.api_wrapper("post", "/api/groups/shopping/items", data=data)
+
+    async def async_update_shopping_list_item(
+        self, shopping_list_id: str, item_id: str, summary: str, checked: bool
+    ) -> dict:
+
+        data = {"isFood": "False", "checked": checked}
+        data["note"] = summary
+        data["item_id"] = item_id
+        data["shoppingListId"] = shopping_list_id
+
+        return await self.api_wrapper(
+            "put", f"/api/groups/shopping/items/{item_id}", data=data
+        )
 
     async def api_wrapper(self, method: str, service: str, data: dict = {}) -> any:
         """Get information from the API."""
@@ -89,7 +103,11 @@ class MealieApiClient:
                     response = await self._session.put(
                         url=url,
                         json=data,
-                        headers={"Authorization": f"bearer {self._token}"},
+                        headers={
+                            "accept": "application/json",
+                            "Content-Type": "application/json",
+                            "Authorization": f"bearer {self._token}",
+                        },
                     )
 
                     if response.status >= 200 and response.status < 300:

@@ -122,10 +122,37 @@ class MealieTodoListEntity(
     async def async_create_todo_item(self, item: TodoItem) -> None:
         """Add an item to the To-do list."""
 
+        position = (
+            self.coordinator.shopping_list_items[self._shopping_list_id][-1].get(
+                "position"
+            )
+            + 1
+        )
+
         await self.coordinator.api.async_add_shopping_list_item(
-            self._shopping_list_id, item.summary
+            self._shopping_list_id, item.summary, position
         )
         await self.coordinator.async_refresh()
+
+    async def async_update_todo_item(self, item: TodoItem) -> None:
+        """Update an item to the To-do list."""
+
+        # try:
+        await self.coordinator.api.async_update_shopping_list_item(
+            self._shopping_list_id,
+            item.uid,
+            item.summary,
+            item.status == TodoItemStatus.COMPLETED,
+        )
+        await self.coordinator.async_refresh()
+        # except NoMatchingShoppingListItem as err:
+        #     raise HomeAssistantError(
+        #         f"Shopping list item '{item.uid}' was not found"
+        #     ) from err
+
+    # async def async_delete_todo_items(self, uids: list[str]) -> None:
+    #     """Delete an item to the To-do list."""
+    #     await self.coordinator.api(set(uids))
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -186,10 +213,6 @@ class MealieTodoListEntity(
     #         raise HomeAssistantError(
     #             f"Shopping list item '{item.uid}' was not found"
     #         ) from err
-
-    # async def async_delete_todo_items(self, uids: list[str]) -> None:
-    #     """Add an item to the To-do list."""
-    #     await self._data.async_remove_items(set(uids))
 
     # async def async_move_todo_item(
     #     self, uid: str, previous_uid: str | None = None
