@@ -18,7 +18,7 @@ class MealieApiClient:
     """API for Mealie."""
 
     def __init__(self, host: str, token: str, session: aiohttp.ClientSession) -> None:
-        """Sample API Client."""
+        """Setup API session."""
         self._host = host
         self._token = token
         self._session = session
@@ -47,6 +47,16 @@ class MealieApiClient:
         params["queryFilter"] = f"shopping_list_id={shopping_list_id}"
 
         return await self.api_wrapper("get", "/api/groups/shopping/items", data=params)
+
+    async def async_add_shopping_list_item(
+        self, shopping_list_id: str, summary: str
+    ) -> dict:
+
+        data = {"isFood": "False", "checked": "False"}
+        data["note"] = summary
+        data["shoppingListId"] = shopping_list_id
+
+        return await self.api_wrapper("post", "/api/groups/shopping/items", data=data)
 
     async def api_wrapper(self, method: str, service: str, data: dict = {}) -> any:
         """Get information from the API."""
@@ -96,7 +106,11 @@ class MealieApiClient:
                     response = await self._session.post(
                         url=url,
                         json=data,
-                        headers={"Authorization": f"bearer {self._token}"},
+                        headers={
+                            "accept": "application/json",
+                            "Content-Type": "application/json",
+                            "Authorization": f"bearer {self._token}",
+                        },
                     )
 
                     if response.status >= 200 and response.status < 300:

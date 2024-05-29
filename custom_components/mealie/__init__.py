@@ -69,14 +69,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if entry.data[CONF_HOST] == "" or entry.data[CONF_TOKEN] == "":
         raise ConfigEntryAuthFailed("Unable to login, please re-login.") from None
 
-    client = MealieApiClient(
+    api = MealieApiClient(
         host=entry.data[CONF_HOST],
         token=entry.data[CONF_TOKEN],
         session=session,
     )
 
     hass.data[DOMAIN][entry.entry_id] = coordinator = MealieDataUpdateCoordinator(
-        hass=hass, client=client, group_id=entry.data[CONF_GROUP_ID]
+        hass=hass, api=api, group_id=entry.data[CONF_GROUP_ID]
     )
 
     await coordinator.async_config_entry_first_refresh()

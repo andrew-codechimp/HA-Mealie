@@ -122,6 +122,11 @@ class MealieTodoListEntity(
     async def async_create_todo_item(self, item: TodoItem) -> None:
         """Add an item to the To-do list."""
 
+        await self.coordinator.api.async_add_shopping_list_item(
+            self._shopping_list_id, item.summary
+        )
+        await self.coordinator.async_refresh()
+
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""

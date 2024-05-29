@@ -24,11 +24,11 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
     def __init__(
         self,
         hass: HomeAssistant,
-        client: MealieApiClient,
+        api: MealieApiClient,
         group_id: str,
     ) -> None:
         """Initialize."""
-        self.client = client
+        self.api = api
         self.group_id = group_id
 
         self._shopping_lists: dict | None = None
@@ -45,14 +45,14 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
         """Return shopping lists  fetched at most once."""
         if self._shopping_lists is None:
 
-            result = await self.client.async_get_shopping_lists(self.group_id)
+            result = await self.api.async_get_shopping_lists(self.group_id)
 
             self._shopping_lists = result.get("items")
         return self._shopping_lists
 
     async def async_get_shopping_lists_items(self, shopping_list_id) -> dict:
         """Return shopping lists  fetched at most once."""
-        result = await self.client.async_get_shopping_list_items(
+        result = await self.api.async_get_shopping_list_items(
             self.group_id, shopping_list_id
         )
 
@@ -65,25 +65,20 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
         if not self._shopping_lists:
             return
 
-        for value in self._shopping_lists:
-            shopping_list_id = value.get("id")
-            result = await self.client.async_get_shopping_list_items(
-                self.group_id, shopping_list_id
-            )
+        try:
+            for value in self._shopping_lists:
+                shopping_list_id = value.get("id")
+                result = await self.api.async_get_shopping_list_items(
+                    self.group_id, shopping_list_id
+                )
 
-            items = result.get("items")
-            self.shopping_list_items.update({shopping_list_id: items})
+                if self.api.error:
+                    raise ConfigEntryAuthFailed(
+                        "Unable to login, please re-login."
+                    ) from None
 
-        # try:
-        #     data = await self.client.async_get_shopping_lists(self.group_id)
-        #     if self.client.error:
-        #         raise ConfigEntryAuthFailed(
-        #             "Unable to login, please re-login."
-        #         ) from None
+                items = result.get("items")
+                self.shopping_list_items.update({shopping_list_id: items})
 
-        #     self.shopping_lists = data
-
-        # except Exception as exception:
-        #     raise UpdateFailed(exception) from exception
-
-        # return self.shopping_lists
+        except Exception as exception:
+            raise UpdateFailed(exception) from exception
