@@ -188,7 +188,7 @@ class MealieTodoListEntity(
         position = 0
         for item in list_items:
             await self.coordinator.api.async_reorder_shopping_list_item(
-                self._shopping_list_id, item["id"], item["display"], position
+                self._shopping_list_id, item, position
             )
             position += 1
         await self.coordinator.async_refresh()
