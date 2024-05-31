@@ -35,12 +35,14 @@ class MealieApiClient:
         return await self.api_wrapper("get", "/api/groups/self")
 
     async def async_get_shopping_lists(self, group_id: str) -> dict:
+        """Get all shopping lists for our group."""
         params = {"group_id": group_id}
         return await self.api_wrapper("get", "/api/groups/shopping/lists", data=params)
 
     async def async_get_shopping_list_items(
         self, group_id: str, shopping_list_id: str
     ) -> dict:
+        """Get all shopping list items."""
 
         params = {"orderBy": "position", "orderDirection": "asc", "perPage": "1000"}
         params["group_id"] = group_id
@@ -51,6 +53,7 @@ class MealieApiClient:
     async def async_add_shopping_list_item(
         self, shopping_list_id: str, summary: str, position: int
     ) -> dict:
+        """Add a shopping list item."""
 
         data = {"isFood": "False", "checked": "False"}
         data["note"] = summary
@@ -62,6 +65,7 @@ class MealieApiClient:
     async def async_update_shopping_list_item(
         self, shopping_list_id: str, item_id: str, summary: str, checked: bool
     ) -> dict:
+        """Update a shopping list item."""
 
         data = {"isFood": "False", "checked": checked}
         data["note"] = summary
@@ -70,6 +74,16 @@ class MealieApiClient:
 
         return await self.api_wrapper(
             "put", f"/api/groups/shopping/items/{item_id}", data=data
+        )
+
+    async def async_delete_shopping_list_item(self, item_id: str) -> dict:
+        """Delete a shopping list item"""
+
+        data = {}
+        data["item_id"] = item_id
+
+        return await self.api_wrapper(
+            "delete", f"/api/groups/shopping/items/{item_id}", data=data
         )
 
     async def api_wrapper(self, method: str, service: str, data: dict = {}) -> any:

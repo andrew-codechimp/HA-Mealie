@@ -120,7 +120,7 @@ class MealieTodoListEntity(
         # self._handle_coordinator_update()
 
     async def async_create_todo_item(self, item: TodoItem) -> None:
-        """Add an item to the To-do list."""
+        """Add an item to the list."""
 
         position = (
             self.coordinator.shopping_list_items[self._shopping_list_id][-1].get(
@@ -135,7 +135,7 @@ class MealieTodoListEntity(
         await self.coordinator.async_refresh()
 
     async def async_update_todo_item(self, item: TodoItem) -> None:
-        """Update an item to the To-do list."""
+        """Update an item on the list."""
 
         # try:
         await self.coordinator.api.async_update_shopping_list_item(
@@ -150,9 +150,12 @@ class MealieTodoListEntity(
         #         f"Shopping list item '{item.uid}' was not found"
         #     ) from err
 
-    # async def async_delete_todo_items(self, uids: list[str]) -> None:
-    #     """Delete an item to the To-do list."""
-    #     await self.coordinator.api(set(uids))
+    async def async_delete_todo_items(self, uids: list[str]) -> None:
+        """Delete items from the list."""
+        for uid in uids:
+            await self.coordinator.api.async_delete_shopping_list_item(uid)
+
+        await self.coordinator.async_refresh()
 
     @callback
     def _handle_coordinator_update(self) -> None:
