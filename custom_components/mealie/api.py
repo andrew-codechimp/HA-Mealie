@@ -76,6 +76,21 @@ class MealieApiClient:
             "put", f"/api/groups/shopping/items/{item_id}", data=data
         )
 
+    async def async_reorder_shopping_list_item(
+        self, shopping_list_id: str, item_id: str, summary: str, position: int
+    ) -> dict:
+        """Update a shopping list item position."""
+
+        data = {}
+        data["position"] = position
+        data["note"] = summary
+        data["item_id"] = item_id
+        data["shoppingListId"] = shopping_list_id
+
+        return await self.api_wrapper(
+            "put", f"/api/groups/shopping/items/{item_id}", data=data
+        )
+
     async def async_delete_shopping_list_item(self, item_id: str) -> dict:
         """Delete a shopping list item"""
 
@@ -103,7 +118,7 @@ class MealieApiClient:
                         headers={"Authorization": f"bearer {self._token}"},
                     )
 
-                    if response.status >= 200 and response.status < 300:
+                    if response.status == 200:
                         data = await response.json()
                         LOGGER.debug(
                             "%s query response: %s",
@@ -124,7 +139,7 @@ class MealieApiClient:
                         },
                     )
 
-                    if response.status >= 200 and response.status < 300:
+                    if response.status == 200:
                         data = await response.json()
                         LOGGER.debug(
                             "%s query response: %s",
@@ -145,7 +160,7 @@ class MealieApiClient:
                         },
                     )
 
-                    if response.status >= 200 and response.status < 300:
+                    if response.status == 201:
                         data = await response.json()
                         LOGGER.debug(
                             "%s query response: %s",
@@ -162,7 +177,7 @@ class MealieApiClient:
                         headers={"Authorization": f"bearer {self._token}"},
                     )
 
-                    if response.status >= 200 and response.status < 300:
+                    if response.status == 200:
                         data = await response.json()
                         LOGGER.debug(
                             "%s query response: %s",
