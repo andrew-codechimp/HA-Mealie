@@ -7,8 +7,6 @@ import socket
 import aiohttp
 from asyncio import timeout
 
-TIMEOUT = 10
-
 from .const import LOGGER
 
 HEADERS = {"Content-type": "application/json; charset=UTF-8"}
@@ -18,7 +16,7 @@ class MealieApiClient:
     """API for Mealie."""
 
     def __init__(self, host: str, token: str, session: aiohttp.ClientSession) -> None:
-        """Setup API session."""
+        """Initialize."""
         self._host = host
         self._token = token
         self._session = session
@@ -32,6 +30,7 @@ class MealieApiClient:
         return {"Authorization": f"bearer {self._token}"}
 
     async def async_get_groups(self) -> dict:
+        """Get current users group."""
         return await self.api_wrapper("get", "/api/groups/self")
 
     async def async_get_shopping_lists(self, group_id: str) -> dict:
@@ -97,7 +96,7 @@ class MealieApiClient:
         )
 
     async def async_delete_shopping_list_item(self, item_id: str) -> dict:
-        """Delete a shopping list item"""
+        """Delete a shopping list item."""
 
         data = {}
         data["item_id"] = item_id
@@ -224,6 +223,8 @@ class MealieApiClient:
         return self._error
 
     def http_normalize_slashes(self, service):
+        """Fix slashes between host and service."""
+
         url = f"{self._host}{service}"
         segments = url.split("/")
         correct_segments = []

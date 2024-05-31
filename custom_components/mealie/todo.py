@@ -44,6 +44,7 @@ def _convert_api_item(item: dict[str, str]) -> TodoItem:
 
 def _convert_todo_item(item: TodoItem) -> dict[str, str | None]:
     """Convert TodoItem dataclass items to dictionary of attributes the tasks API."""
+
     result: dict[str, str | None] = {}
     result["display"] = item.summary
     if item.status is not None:
@@ -179,7 +180,7 @@ class MealieTodoListEntity(
             if old_uid_index and previous_uid_index:
                 break
 
-        if previous_uid == None:
+        if previous_uid is None:
             previous_uid_index = -1
 
         list_items.pop(old_uid_index)
