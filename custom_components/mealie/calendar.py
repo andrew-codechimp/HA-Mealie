@@ -126,9 +126,20 @@ class MealieCalendarEntity(
             start = datetime.strptime(mealie_start_dt, "%Y-%m-%d %H:%M:%S")
             end = datetime.strptime(mealie_end_dt, "%Y-%m-%d %H:%M:%S")
 
-
             start = start.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
             end = end.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
+
+            # start = start.replace(tzinfo=dt_util.get_time_zone(self.hass.config.time_zone))
+            # end = end.replace(tzinfo=dt_util.get_time_zone(self.hass.config.time_zone))
+
+            # start_utc = dt_util.as_utc(start)
+            # end_utc = dt_util.as_utc(end)
+
+            # start_utc = start_utc.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
+            # end_utc = end_utc.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
+
+            # start = start.replace(tzinfo=dt_util.get_time_zone(self.hass.config.time_zone))
+            # end = end.replace(tzinfo=dt_util.get_time_zone(self.hass.config.time_zone))
 
             if plan["recipeId"]:
                 summary = plan["recipe"]["name"]
