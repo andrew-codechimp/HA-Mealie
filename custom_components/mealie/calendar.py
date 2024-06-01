@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 import logging
 from typing import Any
 import uuid
@@ -45,7 +45,7 @@ async def async_setup_entry(
     """Set up the Mealie calendar platform config entry."""
     coordinator: MealieDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
-    async_add_entities(MealieCalendarEntity(coordinator))
+    async_add_entities([MealieCalendarEntity(coordinator, entry.entry_id)])
 
 
 class MealieCalendarEntity(
@@ -63,31 +63,32 @@ class MealieCalendarEntity(
         self._attr_name = "Mealie"
         self._attr_unique_id = f"{config_entry_id}-mealplans"
 
-        self.data = TodoistProjectData(
-            coordinator,
-            config_entry_id=config_entry_id,
-        )
+        # self.data = TodoistProjectData(
+        #     coordinator,
+        #     config_entry_id=config_entry_id,
+        # )
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self.data.update()
+        # self.data.update()
         super()._handle_coordinator_update()
 
     @property
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
-        return self.data.calendar_event
+        # return self.data.calendar_event
+        return None
 
     @property
     def name(self) -> str:
         """Return the name of the entity."""
-        return self._name
+        return self._attr_name
 
     async def async_update(self) -> None:
         """Update all Todoist Calendars."""
         await super().async_update()
-        self.data.update()
+        # self.data.update()
 
     async def async_get_events(
         self,
@@ -104,7 +105,41 @@ class MealieCalendarEntity(
             self.coordinator.group_id, mealie_start_date, mealie_end_date
         )
 
-        return await self.data.async_get_events(start_date, end_date)
+        events: list[CalendarEvent] = []
+
+        for plan in plans["items"]:
+            if plan["entryType"] == "breakfast":
+                start_time = "7:00:00"
+                end_time = "11:00:00"
+            elif plan["entryType"] == "lunch":
+                start_time = "11:30:00"
+                end_time = "14:00:00"
+            elif plan["entryType"] == "dinner":
+                start_time = "16:00:00"
+                end_time = "21:00:00"
+            else:
+                start_time = "16:00:00"
+                end_time = "21:00:00"
+
+            mealie_start_dt = f"{plan["date"]} {start_time}"
+            mealie_end_dt = f"{plan["date"]} {end_time}"
+            start = datetime.strptime(mealie_start_dt, "%Y-%m-%d %H:%M:%S")
+            end = datetime.strptime(mealie_end_dt, "%Y-%m-%d %H:%M:%S")
+
+
+            start = start.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
+            end = end.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
+
+            if plan["recipeId"]:
+                summary = plan["recipe"]["name"]
+            else:
+                summary = plan["title"]
+
+            event = CalendarEvent(start=start, end=end, summary=summary, uid=plan["id"])
+
+            events.append(event)
+
+        return events
 
     # @property
     # def extra_state_attributes(self) -> dict[str, Any] | None:
@@ -438,13 +473,13 @@ class MealieCalendarEntity(
 #         _LOGGER.debug("Updated %s", self._name)
 
 
-def get_start(due: Due) -> datetime | date | None:
-    """Return the task due date as a start date or date time."""
-    if due.datetime:
-        start = dt_util.parse_datetime(due.datetime)
-        if not start:
-            return None
-        return dt_util.as_local(start)
-    if due.date:
-        return dt_util.parse_date(due.date)
-    return None
+# def get_start(due: Due) -> datetime | date | None:
+#     """Return the task due date as a start date or date time."""
+#     if due.datetime:
+#         start = dt_util.parse_datetime(due.datetime)
+#         if not start:
+#             return None
+#         return dt_util.as_local(start)
+#     if due.date:
+#         return dt_util.parse_date(due.date)
+#     return None
