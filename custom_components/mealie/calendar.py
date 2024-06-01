@@ -111,15 +111,19 @@ class MealieCalendarEntity(
             if plan["entryType"] == "breakfast":
                 start_time = "7:00:00"
                 end_time = "11:00:00"
+                summary_event_type = "Breakfast"
             elif plan["entryType"] == "lunch":
                 start_time = "11:30:00"
                 end_time = "14:00:00"
+                summary_event_type = "Lunch"
             elif plan["entryType"] == "dinner":
                 start_time = "16:00:00"
                 end_time = "21:00:00"
+                summary_event_type = "Dinner"
             else:
                 start_time = "16:00:00"
                 end_time = "21:00:00"
+                summary_event_type = "Side"
 
             mealie_start_dt = f"{plan["date"]} {start_time}"
             mealie_end_dt = f"{plan["date"]} {end_time}"
@@ -142,9 +146,9 @@ class MealieCalendarEntity(
             # end = end.replace(tzinfo=dt_util.get_time_zone(self.hass.config.time_zone))
 
             if plan["recipeId"]:
-                summary = plan["recipe"]["name"]
+                summary = f"{plan["recipe"]["name"]} ({summary_event_type})"
             else:
-                summary = plan["title"]
+                summary = f"{plan["title"]} ({summary_event_type})"
 
             event = CalendarEvent(start=start, end=end, summary=summary, uid=plan["id"])
 
