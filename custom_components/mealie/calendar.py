@@ -71,13 +71,13 @@ class MealieCalendarEntity(
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        # self.data.update()
+        self.todays_meal_plan = self.coordinator.meal_plan
         super()._handle_coordinator_update()
 
     @property
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
-        # return self.data.calendar_event
+        # return self.todays_meal_plan
         return None
 
     @property
@@ -86,7 +86,7 @@ class MealieCalendarEntity(
         return self._attr_name
 
     async def async_update(self) -> None:
-        """Update all Todoist Calendars."""
+        """Update Mealie Calendars."""
         await super().async_update()
         # self.data.update()
 

@@ -114,6 +114,13 @@ class MealieApiClient:
 
         return await self.api_wrapper("get", "/api/groups/mealplans", data=params)
 
+    async def async_get_meal_plans_today(self, group_id: str) -> dict:
+        """Get today's meal plans for our group."""
+        params = {"orderBy": "date", "orderDirection": "asc", "perPage": "1000"}
+        params["group_id"] = group_id
+
+        return await self.api_wrapper("get", "/api/groups/mealplans/today", data=params)
+
     async def api_wrapper(self, method: str, service: str, data: dict = {}) -> any:
         """Get information from the API."""
 

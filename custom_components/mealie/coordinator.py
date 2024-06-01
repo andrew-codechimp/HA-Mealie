@@ -33,6 +33,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
 
         self._shopping_lists: dict | None = None
         self.shopping_list_items: dict = {}
+        self.meal_plan: dict = {}
 
         super().__init__(
             hass=hass,
@@ -62,11 +63,27 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data."""
 
-        if not self._shopping_lists:
-            return
+        # Today's meal plan
 
         try:
-            # Shopping lists
+            result = await self.api.async_get_meal_plans_today(self.group_id)
+
+            if self.api.error:
+                raise ConfigEntryAuthFailed(
+                    "Unable to login, please re-login."
+                ) from None
+
+            self.meal_plan = result
+
+        except Exception as exception:
+            raise UpdateFailed(exception) from exception
+
+        # Shopping lists
+
+        if not self._shopping_lists:
+            return
+        try:
+
             for value in self._shopping_lists:
                 shopping_list_id = value.get("id")
                 result = await self.api.async_get_shopping_list_items(
