@@ -66,6 +66,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
             return
 
         try:
+            # Shopping lists
             for value in self._shopping_lists:
                 shopping_list_id = value.get("id")
                 result = await self.api.async_get_shopping_list_items(

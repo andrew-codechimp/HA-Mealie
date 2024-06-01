@@ -105,6 +105,15 @@ class MealieApiClient:
             "delete", f"/api/groups/shopping/items/{item_id}", data=data
         )
 
+    async def async_get_meal_plans(self, group_id: str, start_date: str, end_date: str) -> dict:
+        """Get all meal plans for our group."""
+        params = {"orderBy": "date", "orderDirection": "asc", "perPage": "1000"}
+        params["group_id"] = group_id
+        params["start_date"] = start_date
+        params["end_date"] = end_date
+
+        return await self.api_wrapper("get", "/api/groups/mealplans", data=params)
+
     async def api_wrapper(self, method: str, service: str, data: dict = {}) -> any:
         """Get information from the API."""
 
