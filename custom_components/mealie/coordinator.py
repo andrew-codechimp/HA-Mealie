@@ -75,6 +75,17 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         return plan["title"]
         return None
 
+    def todays_side(self) -> str | None:
+        """Return today's side."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "side":
+                    if plan["recipeId"]:
+                        return plan["recipe"]["name"]
+                    else:
+                        return plan["title"]
+        return None
+
     async def async_get_shopping_lists(self) -> dict:
         """Return shopping lists  fetched at most once."""
         if self._shopping_lists is None:

@@ -100,7 +100,9 @@ class MealieTodoListEntity(
         """Initialize LocalTodoListEntity."""
         super().__init__(coordinator)
         self._attr_name = name
+        self.entity_id = f"todo.mealie_{name}"
         self._attr_unique_id = f"{config_entry_id}-{list_id}"
+        self._attr_has_entity_name = True
         self._shopping_list_id = list_id
 
     @property

@@ -28,6 +28,10 @@ ENTITY_DESCRIPTIONS = (
         key="todays_dinner",
         translation_key="todays_dinner",
     ),
+    SensorEntityDescription(
+        key="todays_side",
+        translation_key="todays_side",
+    ),
 )
 
 
@@ -86,6 +90,8 @@ class MealieSensor(CoordinatorEntity[MealieDataUpdateCoordinator], SensorEntity)
             self._native_value = self.coordinator.todays_lunch()
         if self.entity_description.key == "todays_dinner":
             self._native_value = self.coordinator.todays_dinner()
+        if self.entity_description.key == "todays_side":
+            self._native_value = self.coordinator.todays_side()
 
         self.async_write_ha_state()
 

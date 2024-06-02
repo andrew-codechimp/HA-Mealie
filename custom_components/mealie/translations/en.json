@@ -35,6 +35,9 @@
             },
             "todays_dinner": {
                 "name": "Today's dinner"
+            },
+            "todays_side": {
+                "name": "Today's side"
             }
         }
     }
