@@ -12,6 +12,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
+from .entity import MealieEntity
 from .coordinator import MealieDataUpdateCoordinator
 
 
@@ -52,7 +53,7 @@ async def async_setup_entry(
     )
 
 
-class MealieSensor(CoordinatorEntity[MealieDataUpdateCoordinator], SensorEntity):
+class MealieSensor(MealieEntity, SensorEntity):
     """MastodonProfileStats Sensor class."""
 
     _attr_should_poll = False

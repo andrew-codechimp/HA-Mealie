@@ -17,6 +17,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
+from .entity import MealieEntity
 from .coordinator import MealieDataUpdateCoordinator
 
 
@@ -76,9 +77,7 @@ async def async_setup_entry(
     )
 
 
-class MealieTodoListEntity(
-    CoordinatorEntity[MealieDataUpdateCoordinator], TodoListEntity
-):
+class MealieTodoListEntity(MealieEntity, TodoListEntity):
     """A To-do List representation of a Mealie Shopping List."""
 
     # _attr_has_entity_name = True
@@ -98,7 +97,7 @@ class MealieTodoListEntity(
         name: str,
     ) -> None:
         """Initialize LocalTodoListEntity."""
-        super().__init__(coordinator)
+        super().__init__(entity_description=None, coordinator=coordinator)
         self._attr_name = name
         self.entity_id = f"todo.mealie_{name}"
         self._attr_unique_id = f"{config_entry_id}-{list_id}"

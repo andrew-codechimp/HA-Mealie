@@ -7,29 +7,18 @@ from dataclasses import dataclass
 from homeassistant.helpers.entity import DeviceInfo, EntityDescription
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import ATTRIBUTION, DOMAIN, NAME, VERSION, MANUFACTURER
+from .const import DOMAIN, NAME, VERSION, MANUFACTURER
 from .coordinator import MealieDataUpdateCoordinator
-
-
-@dataclass
-class MealieEntityDescription(EntityDescription):
-    """Defines a base Mealie entity description."""
-
-    entity_id: str | None = None
-    api_field: str | None = None
 
 
 class MealieEntity(CoordinatorEntity):
     """MealieEntity class."""
 
-    _attr_attribution = ATTRIBUTION
-
-    entity_description: MealieEntityDescription
     _attr_has_entity_name = True
 
     def __init__(
         self,
-        description: MealieEntityDescription,
+        entity_description: EntityDescription | None,
         coordinator: MealieDataUpdateCoordinator,
     ) -> None:
         """Initialize."""
@@ -41,6 +30,6 @@ class MealieEntity(CoordinatorEntity):
             model=VERSION,
             manufacturer=MANUFACTURER,
         )
-        self.entity_description = description
-        if description.entity_id:
-            self.entity_id = description.entity_id
+
+        if entity_description:
+            self.entity_description = entity_description

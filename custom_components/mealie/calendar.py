@@ -32,6 +32,8 @@ from homeassistant.util import dt as dt_util
 from .const import (
     DOMAIN,
 )
+
+from .entity import MealieEntity
 from .coordinator import MealieDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
@@ -48,7 +50,7 @@ async def async_setup_entry(
 
 
 class MealieCalendarEntity(
-    CoordinatorEntity[MealieDataUpdateCoordinator], CalendarEntity
+    MealieEntity, CalendarEntity
 ):
     """A device for getting the next Task from a Todoist Project."""
 
@@ -58,7 +60,7 @@ class MealieCalendarEntity(
         config_entry_id: str,
     ) -> None:
         """Create the Mealie Calendar Entity."""
-        super().__init__(coordinator)
+        super().__init__(entity_description=None, coordinator=coordinator)
         self._attr_name = "Mealie"
         self._attr_unique_id = f"{config_entry_id}-mealplans"
 
