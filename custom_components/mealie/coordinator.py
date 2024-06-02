@@ -42,7 +42,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
             update_interval=timedelta(seconds=10),
         )
 
-    def today_breakfast(self) -> str | None:
+    def todays_breakfast(self) -> str | None:
         """Return today's breakfast."""
         if self.meal_plan:
             for plan in self.meal_plan:
@@ -53,7 +53,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         return plan["title"]
         return None
 
-    def today_lunch(self) -> str | None:
+    def todays_lunch(self) -> str | None:
         """Return today's lunch."""
         if self.meal_plan:
             for plan in self.meal_plan:
@@ -64,7 +64,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         return plan["title"]
         return None
 
-    def today_dinner(self) -> str | None:
+    def todays_dinner(self) -> str | None:
         """Return today's dinner."""
         if self.meal_plan:
             for plan in self.meal_plan:

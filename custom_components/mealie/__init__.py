@@ -32,7 +32,7 @@ from .const import (
 from .api import MealieApiClient
 from .coordinator import MealieDataUpdateCoordinator
 
-PLATFORMS: list[Platform] = [Platform.TODO, Platform.CALENDAR]
+PLATFORMS: list[Platform] = [Platform.TODO, Platform.CALENDAR, Platform.SENSOR]
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
