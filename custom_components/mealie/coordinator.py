@@ -42,6 +42,39 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
             update_interval=timedelta(seconds=10),
         )
 
+    def today_breakfast(self) -> str | None:
+        """Return today's breakfast."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "breakfast":
+                    if plan["recipeId"]:
+                        return plan["recipe"]["name"]
+                    else:
+                        return plan["title"]
+        return None
+
+    def today_lunch(self) -> str | None:
+        """Return today's lunch."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "lunch":
+                    if plan["recipeId"]:
+                        return plan["recipe"]["name"]
+                    else:
+                        return plan["title"]
+        return None
+
+    def today_dinner(self) -> str | None:
+        """Return today's dinner."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "dinner":
+                    if plan["recipeId"]:
+                        return plan["recipe"]["name"]
+                    else:
+                        return plan["title"]
+        return None
+
     async def async_get_shopping_lists(self) -> dict:
         """Return shopping lists  fetched at most once."""
         if self._shopping_lists is None:

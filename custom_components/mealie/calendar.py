@@ -19,7 +19,7 @@ from homeassistant.components.calendar import (
     CalendarEvent,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_ID, CONF_NAME, CONF_TOKEN, EVENT_HOMEASSISTANT_STOP
+from homeassistant.const import CONF_ID, CONF_NAME, CONF_TOKEN, EVENT_HOMEASSISTANT_STOP, STATE_OFF, STATE_ON
 from homeassistant.core import Event, HomeAssistant, ServiceCall, callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -37,7 +37,6 @@ from .coordinator import MealieDataUpdateCoordinator
 _LOGGER = logging.getLogger(__name__)
 
 SCAN_INTERVAL = timedelta(minutes=1)
-
 
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
@@ -75,10 +74,66 @@ class MealieCalendarEntity(
         super()._handle_coordinator_update()
 
     @property
+    def breakfast_start(self) -> datetime:
+        """Return breakfast start today."""
+        return dt_util.now().replace(hour=7, minute=0, second=0)
+
+    @property
+    def breakfast_end(self) -> datetime:
+        """Return breakfast end today."""
+        return dt_util.now().replace(hour=11, minute=0, second=0)
+
+    @property
+    def lunch_start(self) -> datetime:
+        """Return lunch start today."""
+        return dt_util.now().replace(hour=11, minute=30, second=0)
+
+    @property
+    def lunch_end(self) -> datetime:
+        """Return lunch end today."""
+        return dt_util.now().replace(hour=14, minute=30, second=0)
+
+    @property
+    def dinner_start(self) -> datetime:
+        """Return dinner start today."""
+        return dt_util.now().replace(hour=16, minute=0, second=0)
+
+    @property
+    def dinner_end(self) -> datetime:
+        """Return dinner end today."""
+        return dt_util.now().replace(hour=21, minute=0, second=0)
+
+
+    @property
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
-        # return self.todays_meal_plan
+
+        if self.breakfast_start <= dt_util.utcnow() <= self.breakfast_end:
+            if self.coordinator.today_breakfast():
+                return CalendarEvent(start=self.breakfast_start, end=self.breakfast_end, summary=self.coordinator.today_breakfast())
+
+        if self.lunch_start <= dt_util.utcnow() <= self.lunch_end:
+            if self.coordinator.today_lunch():
+                return CalendarEvent(start=self.lunch_start, end=self.lunch_end, summary=self.coordinator.today_lunch())
+
+        if self.dinner_start <= dt_util.utcnow() <= self.dinner_end:
+            if self.coordinator.today_dinner():
+                return CalendarEvent(start=self.dinner_start, end=self.dinner_end, summary=self.coordinator.today_dinner())
+
         return None
+
+    @property
+    def state(self) -> str:
+        """Return the state of the calendar event."""
+        if (event := self.event) is None:
+            return STATE_OFF
+
+        now = dt_util.now()
+
+        if event.start_datetime_local <= now < event.end_datetime_local:
+            return STATE_ON
+
+        return STATE_OFF
 
     @property
     def name(self) -> str:
@@ -111,19 +166,15 @@ class MealieCalendarEntity(
             if plan["entryType"] == "breakfast":
                 start_time = "7:00:00"
                 end_time = "11:00:00"
-                summary_event_type = "Breakfast"
             elif plan["entryType"] == "lunch":
                 start_time = "11:30:00"
-                end_time = "14:00:00"
-                summary_event_type = "Lunch"
+                end_time = "14:30:00"
             elif plan["entryType"] == "dinner":
                 start_time = "16:00:00"
                 end_time = "21:00:00"
-                summary_event_type = "Dinner"
             else:
                 start_time = "16:00:00"
                 end_time = "21:00:00"
-                summary_event_type = "Side"
 
             mealie_start_dt = f"{plan["date"]} {start_time}"
             mealie_end_dt = f"{plan["date"]} {end_time}"
@@ -146,9 +197,9 @@ class MealieCalendarEntity(
             # end = end.replace(tzinfo=dt_util.get_time_zone(self.hass.config.time_zone))
 
             if plan["recipeId"]:
-                summary = f"{plan["recipe"]["name"]} ({summary_event_type})"
+                summary = plan["recipe"]["name"]
             else:
-                summary = f"{plan["title"]} ({summary_event_type})"
+                summary = plan["title"]
 
             event = CalendarEvent(start=start, end=end, summary=summary, uid=plan["id"])
 
