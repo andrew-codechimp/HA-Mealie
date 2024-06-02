@@ -108,15 +108,15 @@ class MealieCalendarEntity(
     def event(self) -> CalendarEvent | None:
         """Return the next upcoming event."""
 
-        if self.breakfast_start <= dt_util.utcnow() <= self.breakfast_end:
+        if self.breakfast_start <= dt_util.now() <= self.breakfast_end:
             if self.coordinator.todays_breakfast():
                 return CalendarEvent(start=self.breakfast_start, end=self.breakfast_end, summary=self.coordinator.todays_breakfast())
 
-        if self.lunch_start <= dt_util.utcnow() <= self.lunch_end:
+        if self.lunch_start <= dt_util.now() <= self.lunch_end:
             if self.coordinator.todays_lunch():
                 return CalendarEvent(start=self.lunch_start, end=self.lunch_end, summary=self.coordinator.todays_lunch())
 
-        if self.dinner_start <= dt_util.utcnow() <= self.dinner_end:
+        if self.dinner_start <= dt_util.now() <= self.dinner_end:
             if self.coordinator.todays_dinner():
                 return CalendarEvent(start=self.dinner_start, end=self.dinner_end, summary=self.coordinator.todays_dinner())
 
