@@ -136,11 +136,6 @@ class MealieCalendarEntity(
 
         return STATE_OFF
 
-    @property
-    def name(self) -> str:
-        """Return the name of the entity."""
-        return self._attr_name
-
     async def async_update(self) -> None:
         """Update Mealie Calendars."""
         await super().async_update()
