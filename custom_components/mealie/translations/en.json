@@ -19,9 +19,8 @@
             "reauth_successful": "Reauthentication Successful"
         },
         "error": {
-            "Control authorisation failed": "Control authorisation failed.",
-            "Bad control-login": "Bad control-login.",
-            "no_connection": "Unable to connect to the server.",
+            "no_connection": "Unable to connect to Mealie server.",
+            "401": "Unable to connect or your token is invalid.",
             "unknown": "Unknown error occurred."
         }
     },

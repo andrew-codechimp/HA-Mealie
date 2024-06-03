@@ -1,9 +1,5 @@
 """A Mealie todo platform."""
 
-from typing import cast
-
-from datetime import date, datetime, timedelta
-
 from homeassistant.components.todo import (
     TodoItem,
     TodoItemStatus,
@@ -12,9 +8,7 @@ from homeassistant.components.todo import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
 from .entity import MealieEntity
@@ -80,8 +74,6 @@ async def async_setup_entry(
 class MealieTodoListEntity(MealieEntity, TodoListEntity):
     """A To-do List representation of a Mealie Shopping List."""
 
-    # _attr_has_entity_name = True
-    # _attr_should_poll = True
     _attr_supported_features = (
         TodoListEntityFeature.CREATE_TODO_ITEM
         | TodoListEntityFeature.UPDATE_TODO_ITEM
@@ -205,12 +197,7 @@ class MealieTodoListEntity(MealieEntity, TodoListEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        # if self.coordinator.data is None:
-        # self._attr_todo_items = None
-        # else:
         items = []
-
-        # TODO: Handle list id not present yet
 
         if self._shopping_list_id in self.coordinator.shopping_list_items:
 
