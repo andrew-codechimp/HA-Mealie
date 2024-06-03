@@ -144,7 +144,6 @@ class MealieCalendarEntity(
     async def async_update(self) -> None:
         """Update Mealie Calendars."""
         await super().async_update()
-        # self.data.update()
 
     async def async_get_events(
         self,
