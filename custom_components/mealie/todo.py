@@ -74,6 +74,8 @@ async def async_setup_entry(
 class MealieTodoListEntity(MealieEntity, TodoListEntity):
     """A To-do List representation of a Mealie Shopping List."""
 
+    _unrecorded_attributes = frozenset({ATTR_SHOPPING_LIST_ID})
+
     _attr_supported_features = (
         TodoListEntityFeature.CREATE_TODO_ITEM
         | TodoListEntityFeature.UPDATE_TODO_ITEM
