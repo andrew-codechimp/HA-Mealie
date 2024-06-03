@@ -10,7 +10,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
+from .const import DOMAIN, ATTR_SHOPPING_LIST_ID
 from .entity import MealieEntity
 from .coordinator import MealieDataUpdateCoordinator
 
@@ -208,3 +208,16 @@ class MealieTodoListEntity(MealieEntity, TodoListEntity):
         self._attr_todo_items = items
 
         super()._handle_coordinator_update()
+
+    @property
+    def extra_state_attributes(self) -> dict[str, str] | None:
+        """Return the state attributes of the shopping list."""
+
+        attrs = {
+            ATTR_SHOPPING_LIST_ID: self._shopping_list_id,
+        }
+
+        super_attrs = super().extra_state_attributes
+        if super_attrs:
+            attrs.update(super_attrs)
+        return attrs

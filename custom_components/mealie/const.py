@@ -28,3 +28,5 @@ CONF_LUNCH_START = "lunch_start"
 CONF_LUNCH_END = "lunch_end"
 CONF_DINNER_START = "dinner_start"
 CONF_DINNER_END = "dinner_end"
+
+ATTR_SHOPPING_LIST_ID = "shopping_list_id"

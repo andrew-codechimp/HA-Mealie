@@ -1,4 +1,4 @@
-"""Custom integration to integrate mealie with Home Assistant.
+"""Custom integration to integrate Mealie with Home Assistant.
 
 For more details about this integration, please refer to
 https://github.com/andrew-codechimp/HA-Mealie
