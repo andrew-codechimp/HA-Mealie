@@ -18,6 +18,7 @@ from homeassistant.util import dt as dt_util
 from .const import (
     DOMAIN,
     DOMAIN_CONFIG,
+    COORDINATOR,
     CONF_BREAKFAST_START,
     CONF_BREAKFAST_END,
     CONF_LUNCH_START,
@@ -37,7 +38,7 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up the Mealie calendar platform config entry."""
-    coordinator: MealieDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: MealieDataUpdateCoordinator = hass.data[DOMAIN][COORDINATOR]
 
     async_add_entities([MealieCalendarEntity(coordinator, entry.entry_id, hass.data[DOMAIN][DOMAIN_CONFIG])])
 

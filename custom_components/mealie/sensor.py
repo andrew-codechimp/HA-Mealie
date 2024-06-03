@@ -10,7 +10,7 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
+from .const import DOMAIN, COORDINATOR
 from .entity import MealieEntity
 from .coordinator import MealieDataUpdateCoordinator
 
@@ -41,7 +41,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up the sensor platform."""
-    coordinator: MealieDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: MealieDataUpdateCoordinator = hass.data[DOMAIN][COORDINATOR]
 
     async_add_entities(
         MealieSensor(

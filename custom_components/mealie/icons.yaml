@@ -1,0 +1,5 @@
+{
+    "services": {
+        "add_shopping_list_item": "mdi:basket-plus",
+    }
+}

@@ -10,7 +10,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, ATTR_SHOPPING_LIST_ID
+from .const import DOMAIN, COORDINATOR, ATTR_SHOPPING_LIST_ID
 from .entity import MealieEntity
 from .coordinator import MealieDataUpdateCoordinator
 
@@ -56,7 +56,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up the mealie todo platform."""
 
-    coordinator: MealieDataUpdateCoordinator = hass.data[DOMAIN][config_entry.entry_id]
+    coordinator: MealieDataUpdateCoordinator = hass.data[DOMAIN][COORDINATOR]
 
     shopping_lists = await coordinator.async_get_shopping_lists()
 
@@ -90,11 +90,13 @@ class MealieTodoListEntity(MealieEntity, TodoListEntity):
     ) -> None:
         """Initialize LocalTodoListEntity."""
         super().__init__(entity_description=None, coordinator=coordinator)
+
         self._attr_name = name
+        self._attr_has_entity_name = False
         self.entity_id = f"todo.mealie_{name}"
         self._attr_unique_id = f"{config_entry_id}-{list_id}"
-        self._attr_has_entity_name = True
         self._shopping_list_id = list_id
+        self._attr_icon = "mdi:basket"
 
     @property
     def todo_items(self) -> list[TodoItem] | None:

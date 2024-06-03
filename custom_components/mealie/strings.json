@@ -2,10 +2,10 @@
     "config": {
         "step": {
             "user": {
-                "description": "Login with your control account (e.g. abc@a) and password",
+                "description": "Enter your mealie address and API token for your account.",
                 "data": {
-                    "username": "Username",
-                    "password": "Password"
+                    "host": "Host",
+                    "token": "Token"
                 }
             },
             "reauth_confirm": {
@@ -19,20 +19,41 @@
             "reauth_successful": "Reauthentication Successful"
         },
         "error": {
-            "Control authorisation failed": "Control authorisation failed.",
-            "Bad control-login": "Bad control-login.",
-            "no_connection": "Unable to connect to the server.",
+            "no_connection": "Unable to connect to Mealie server.",
+            "401": "Unable to connect or your token is invalid.",
             "unknown": "Unknown error occurred."
         }
     },
     "entity": {
         "sensor": {
-            "monthly_quota": {
-                "name": "Monthly Quota"
+            "todays_breakfast": {
+                "name": "Today's breakfast"
             },
-            "quota_remaining": {
-                "name": "Quota Remaining"
+            "todays_lunch": {
+                "name": "Today's lunch"
+            },
+            "todays_dinner": {
+                "name": "Today's dinner"
+            },
+            "todays_side": {
+                "name": "Today's side"
             }
+        }
+    },
+    "services": {
+        "add_shopping_list_item": {
+            "description": "Add an item to a shopping list.",
+            "fields": {
+                "shopping_list_id": {
+                    "description": "The shopping list id (can be found in attributes of the todo entity).",
+                    "name": "Shopping List ID"
+                },
+                "item": {
+                    "description": "The shopping list item to add.",
+                    "name": "Item"
+                }
+            },
+            "name": "Add shopping list item"
         }
     }
 }
