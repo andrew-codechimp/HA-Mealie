@@ -174,7 +174,7 @@ def register_services(hass: HomeAssistant):
 
         await coordinator.async_request_refresh()
 
-        LOGGER.debug("Item added to shopping list")
+        LOGGER.debug("Item added to shopping list %s", shopping_list_id)
 
         return
 
