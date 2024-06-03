@@ -91,6 +91,7 @@ class MealieTodoListEntity(MealieEntity, TodoListEntity):
         """Initialize LocalTodoListEntity."""
         super().__init__(entity_description=None, coordinator=coordinator)
 
+        self._attr_should_poll = False
         self._attr_name = name
         self._attr_has_entity_name = False
         self.entity_id = f"todo.mealie_{name}"

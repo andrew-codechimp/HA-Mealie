@@ -55,7 +55,6 @@ async def async_setup_entry(
 class MealieSensor(MealieEntity, SensorEntity):
     """MastodonProfileStats Sensor class."""
 
-    _attr_should_poll = False
     entity_description: SensorEntityDescription
 
     _native_value = None
@@ -68,6 +67,7 @@ class MealieSensor(MealieEntity, SensorEntity):
         """Initialize the sensor class."""
         super().__init__(entity_description, coordinator)
 
+        self._attr_should_poll = False
         self.entity_id = f"sensor.mealie_{entity_description.key}"
         self._attr_unique_id = f"mealie_{entity_description.key}".lower()
         self.entity_description = entity_description
