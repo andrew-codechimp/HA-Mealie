@@ -30,8 +30,6 @@ from .const import (
 from .entity import MealieEntity
 from .coordinator import MealieDataUpdateCoordinator
 
-_LOGGER = logging.getLogger(__name__)
-
 SCAN_INTERVAL = timedelta(minutes=1)
 
 async def async_setup_entry(
