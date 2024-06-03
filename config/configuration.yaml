@@ -11,3 +11,11 @@ debugpy:
    start: true
    wait: false
    port: 5678
+
+# mealie:
+#   breakfast_start: "07:00"
+#   breakfast_end: "11:00"
+#   lunch_start: "11:30"
+#   lunch_end: "14:00"
+#   dinner_start: "16:00"
+#   dinner_end: "21:00"

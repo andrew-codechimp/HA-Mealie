@@ -17,6 +17,13 @@ from homeassistant.util import dt as dt_util
 
 from .const import (
     DOMAIN,
+    DOMAIN_CONFIG,
+    CONF_BREAKFAST_START,
+    CONF_BREAKFAST_END,
+    CONF_LUNCH_START,
+    CONF_LUNCH_END,
+    CONF_DINNER_START,
+    CONF_DINNER_END,
 )
 
 from .entity import MealieEntity
@@ -32,7 +39,7 @@ async def async_setup_entry(
     """Set up the Mealie calendar platform config entry."""
     coordinator: MealieDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
-    async_add_entities([MealieCalendarEntity(coordinator, entry.entry_id)])
+    async_add_entities([MealieCalendarEntity(coordinator, entry.entry_id, hass.data[DOMAIN][DOMAIN_CONFIG])])
 
 
 class MealieCalendarEntity(
@@ -44,6 +51,7 @@ class MealieCalendarEntity(
         self,
         coordinator: MealieDataUpdateCoordinator,
         config_entry_id: str,
+        domain_config: dict,
     ) -> None:
         """Create the Mealie Calendar Entity."""
         super().__init__(entity_description=None, coordinator=coordinator)
@@ -51,6 +59,7 @@ class MealieCalendarEntity(
         self.entity_id = f"calendar.mealie"
         self._attr_unique_id = f"{config_entry_id}-mealplans"
         self._attr_has_entity_name = True
+        self.domain_config = domain_config
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -61,32 +70,38 @@ class MealieCalendarEntity(
     @property
     def breakfast_start(self) -> datetime:
         """Return breakfast start today."""
-        return dt_util.now().replace(hour=7, minute=0, second=0)
+        time_str: str = self.domain_config[CONF_BREAKFAST_START]
+        return dt_util.now().replace(hour=int(time_str.split(":")[0]), minute=int(time_str.split(":")[1]), second=0)
 
     @property
     def breakfast_end(self) -> datetime:
         """Return breakfast end today."""
-        return dt_util.now().replace(hour=11, minute=0, second=0)
+        time_str: str = self.domain_config[CONF_BREAKFAST_END]
+        return dt_util.now().replace(hour=int(time_str.split(":")[0]), minute=int(time_str.split(":")[1]), second=0)
 
     @property
     def lunch_start(self) -> datetime:
         """Return lunch start today."""
-        return dt_util.now().replace(hour=11, minute=30, second=0)
+        time_str: str = self.domain_config[CONF_LUNCH_START]
+        return dt_util.now().replace(hour=int(time_str.split(":")[0]), minute=int(time_str.split(":")[1]), second=0)
 
     @property
     def lunch_end(self) -> datetime:
         """Return lunch end today."""
-        return dt_util.now().replace(hour=14, minute=30, second=0)
+        time_str: str = self.domain_config[CONF_LUNCH_END]
+        return dt_util.now().replace(hour=int(time_str.split(":")[0]), minute=int(time_str.split(":")[1]), second=0)
 
     @property
     def dinner_start(self) -> datetime:
         """Return dinner start today."""
-        return dt_util.now().replace(hour=16, minute=0, second=0)
+        time_str: str = self.domain_config[CONF_DINNER_START]
+        return dt_util.now().replace(hour=int(time_str.split(":")[0]), minute=int(time_str.split(":")[1]), second=0)
 
     @property
     def dinner_end(self) -> datetime:
         """Return dinner end today."""
-        return dt_util.now().replace(hour=21, minute=0, second=0)
+        time_str: str = self.domain_config[CONF_DINNER_END]
+        return dt_util.now().replace(hour=int(time_str.split(":")[0]), minute=int(time_str.split(":")[1]), second=0)
 
 
     @property
@@ -149,22 +164,22 @@ class MealieCalendarEntity(
 
         for plan in plans["items"]:
             if plan["entryType"] == "breakfast":
-                start_time = "7:00:00"
-                end_time = "11:00:00"
+                start_time = self.domain_config[CONF_BREAKFAST_START]
+                end_time = self.domain_config[CONF_BREAKFAST_END]
             elif plan["entryType"] == "lunch":
-                start_time = "11:30:00"
-                end_time = "14:30:00"
+                start_time = self.domain_config[CONF_LUNCH_START]
+                end_time = self.domain_config[CONF_LUNCH_END]
             elif plan["entryType"] == "dinner":
-                start_time = "16:00:00"
-                end_time = "21:00:00"
+                start_time = self.domain_config[CONF_DINNER_START]
+                end_time = self.domain_config[CONF_DINNER_END]
             else:
-                start_time = "16:00:00"
-                end_time = "21:00:00"
+                start_time = self.domain_config[CONF_DINNER_START]
+                end_time = self.domain_config[CONF_DINNER_END]
 
             mealie_start_dt = f"{plan["date"]} {start_time}"
             mealie_end_dt = f"{plan["date"]} {end_time}"
-            start = datetime.strptime(mealie_start_dt, "%Y-%m-%d %H:%M:%S")
-            end = datetime.strptime(mealie_end_dt, "%Y-%m-%d %H:%M:%S")
+            start = datetime.strptime(mealie_start_dt, "%Y-%m-%d %H:%M")
+            end = datetime.strptime(mealie_end_dt, "%Y-%m-%d %H:%M")
 
             start = start.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)
             end = end.replace(tzinfo=dt_util.DEFAULT_TIME_ZONE)

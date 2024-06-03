@@ -18,4 +18,13 @@ VERSION = manifest_data.get("version")
 ISSUEURL = manifest_data.get("issue_tracker")
 MANUFACTURER = "@Andrew-CodeChimp"
 
+DOMAIN_CONFIG = "config"
+
 CONF_GROUP_ID = "group_id"
+
+CONF_BREAKFAST_START = "breakfast_start"
+CONF_BREAKFAST_END = "breakfast_end"
+CONF_LUNCH_START = "lunch_start"
+CONF_LUNCH_END = "lunch_end"
+CONF_DINNER_START = "dinner_start"
+CONF_DINNER_END = "dinner_end"
