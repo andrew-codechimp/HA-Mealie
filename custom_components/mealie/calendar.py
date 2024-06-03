@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-import logging
 
 from homeassistant.components.calendar import (
     CalendarEntity,
