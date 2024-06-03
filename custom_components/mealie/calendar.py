@@ -56,7 +56,7 @@ class MealieCalendarEntity(
         """Create the Mealie Calendar Entity."""
         super().__init__(entity_description=None, coordinator=coordinator)
         self._attr_name = None
-        self.entity_id = f"calendar.mealie"
+        self.entity_id = "calendar.mealie"
         self._attr_unique_id = f"{config_entry_id}-mealplans"
         self._attr_has_entity_name = True
         self.domain_config = domain_config

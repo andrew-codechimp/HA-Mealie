@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from awesomeversion.awesomeversion import AwesomeVersion
 
-import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform

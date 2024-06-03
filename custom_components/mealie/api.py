@@ -1,9 +1,5 @@
 """Mealie API Client."""
 
-import asyncio
-import logging
-import socket
-
 import aiohttp
 from asyncio import timeout
 
