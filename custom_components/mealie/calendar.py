@@ -47,8 +47,10 @@ class MealieCalendarEntity(
     ) -> None:
         """Create the Mealie Calendar Entity."""
         super().__init__(entity_description=None, coordinator=coordinator)
-        self._attr_name = "Mealie"
+        self._attr_name = None
+        self.entity_id = f"calendar.mealie"
         self._attr_unique_id = f"{config_entry_id}-mealplans"
+        self._attr_has_entity_name = True
 
     @callback
     def _handle_coordinator_update(self) -> None:
