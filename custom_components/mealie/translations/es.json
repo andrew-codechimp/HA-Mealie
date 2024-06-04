@@ -1,0 +1,59 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "description": "Enter your mealie address and API token for your account.",
+                "data": {
+                    "host": "Host",
+                    "token": "Token"
+                }
+            },
+            "reauth_confirm": {
+                "title": "Mealie - Reauthentication",
+                "description": "Your account is unable to authenticate. Click Submit to re-setup."
+            }
+        },
+        "abort": {
+            "already_configured": "Only one instance of Mealie is allowed",
+            "single_instance_allowed": "Only one instance of Mealie is allowed",
+            "reauth_successful": "Reauthentication Successful"
+        },
+        "error": {
+            "no_connection": "Unable to connect to Mealie server.",
+            "401": "Unable to connect or your token is invalid.",
+            "unknown": "Unknown error occurred."
+        }
+    },
+    "entity": {
+        "sensor": {
+            "todays_breakfast": {
+                "name": "Today's breakfast"
+            },
+            "todays_lunch": {
+                "name": "Today's lunch"
+            },
+            "todays_dinner": {
+                "name": "Today's dinner"
+            },
+            "todays_side": {
+                "name": "Today's side"
+            }
+        }
+    },
+    "services": {
+        "add_shopping_list_item": {
+            "description": "Add an item to a shopping list.",
+            "fields": {
+                "shopping_list_id": {
+                    "description": "The shopping list id (can be found in attributes of the todo entity).",
+                    "name": "Shopping List ID"
+                },
+                "item": {
+                    "description": "The shopping list item to add.",
+                    "name": "Item"
+                }
+            },
+            "name": "Add shopping list item"
+        }
+    }
+}
