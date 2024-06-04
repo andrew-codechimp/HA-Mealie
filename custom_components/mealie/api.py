@@ -58,16 +58,12 @@ class MealieApiClient:
         return await self.api_wrapper("post", "/api/groups/shopping/items", data=data)
 
     async def async_update_shopping_list_item(
-        self, shopping_list_id: str, item_id: str, summary: str, checked: bool
+        self, shopping_list_id: str, item_id: str, item: dict
     ) -> dict:
         """Update a shopping list item."""
 
-        data = {"isFood": "False", "checked": checked}
-        data["note"] = summary
-        data["shoppingListId"] = shopping_list_id
-
         return await self.api_wrapper(
-            "put", f"/api/groups/shopping/items/{item_id}", data=data
+            "put", f"/api/groups/shopping/items/{item_id}", data=item
         )
 
     async def async_reorder_shopping_list_item(
@@ -80,12 +76,13 @@ class MealieApiClient:
         data["item_id"] = item["id"]
         data["position"] = position
         data["isFood"] = item["isFood"]
+        data["quantity"] = item["quantity"]
+        data["labelId"] = item["labelId"]
+        data["note"] = item["note"]
 
         if item["isFood"]:
             data["foodId"] = item["foodId"]
-            data["quantity"] = item["quantity"]
-        else:
-            data["note"] = item["note"]
+            data["unitId"] = item["unitId"]
 
         return await self.api_wrapper(
             "put", f"/api/groups/shopping/items/{item["id"]}", data=data

@@ -10,7 +10,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, COORDINATOR, ATTR_SHOPPING_LIST_ID
+from .const import DOMAIN, LOGGER, COORDINATOR, ATTR_SHOPPING_LIST_ID
 from .entity import MealieEntity
 from .coordinator import MealieDataUpdateCoordinator
 
@@ -139,18 +139,24 @@ class MealieTodoListEntity(MealieEntity, TodoListEntity):
     async def async_update_todo_item(self, item: TodoItem) -> None:
         """Update an item on the list."""
 
-        # try:
-        await self.coordinator.api.async_update_shopping_list_item(
-            self._shopping_list_id,
-            item.uid,
-            item.summary,
-            item.status == TodoItemStatus.COMPLETED,
+        list_items = self.coordinator.shopping_list_items[self._shopping_list_id]
+        for list_item in list_items:
+            if list_item["id"] == item.uid:
+                list_item["note"] = item.summary
+                list_item["isFood"] = "False"
+                list_item["foodId"] = None
+                list_item["quantity"] = "0.0"
+                list_item["checked"] = item.status == TodoItemStatus.COMPLETED
+
+                await self.coordinator.api.async_update_shopping_list_item(
+                    self._shopping_list_id, item.uid, list_item
+                )
+                await self.coordinator.async_refresh()
+                return
+
+        LOGGER.error(
+            "Item %s not found in shopping list %s", item.uid, self._shopping_list_id
         )
-        await self.coordinator.async_refresh()
-        # except NoMatchingShoppingListItem as err:
-        #     raise HomeAssistantError(
-        #         f"Shopping list item '{item.uid}' was not found"
-        #     ) from err
 
     async def async_delete_todo_items(self, uids: list[str]) -> None:
         """Delete items from the list."""
