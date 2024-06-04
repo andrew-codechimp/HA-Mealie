@@ -15,7 +15,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers import config_validation as cv
-from homeassistant.exceptions import ConfigEntryAuthFailed, ServiceValidationError
+from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.const import __version__ as HA_VERSION  # noqa: N812
 
 from homeassistant.const import (

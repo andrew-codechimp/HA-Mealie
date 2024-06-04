@@ -3,9 +3,6 @@
 import json
 from logging import Logger, getLogger
 from pathlib import Path
-import voluptuous as vol
-
-from homeassistant.helpers import config_validation as cv
 
 LOGGER: Logger = getLogger(__package__)
 
