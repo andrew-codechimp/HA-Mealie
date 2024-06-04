@@ -25,7 +25,7 @@ Given that Home Assistant To-do items are more simplistic, if you edit a Mealie 
 Creates a Mealie calendar within Home Assistant, this is read only and creates appropriate time slots for breakfast, lunch and dinner (see below for how to change the time slots.)
 
 **Sensors**  
-Sensors for todays breakfast, lunch, dinner and side are created for easy use on dashboards.
+Sensors for today's breakfast, lunch, dinner and side are created for easy use on dashboards.
 
 **Services**  
 A `mealie.add_shopping_list_item` service allows you to add note type items to your Mealie shopping list.  
