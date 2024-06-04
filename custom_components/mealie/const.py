@@ -36,11 +36,3 @@ CONF_DINNER_START = "dinner_start"
 CONF_DINNER_END = "dinner_end"
 
 ATTR_SHOPPING_LIST_ID = "shopping_list_id"
-ATTR_SHOPPING_LIST_ITEM = "item"
-
-SERVICE_ADD_SHOPPING_LIST_ITEM_SCHEMA = vol.Schema(
-    {
-        vol.Required(ATTR_SHOPPING_LIST_ID): cv.string,
-        vol.Required(ATTR_SHOPPING_LIST_ITEM): cv.string,
-    }
-)

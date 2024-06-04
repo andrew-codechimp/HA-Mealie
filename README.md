@@ -27,10 +27,6 @@ Creates a Mealie calendar within Home Assistant, this is read only and creates a
 **Sensors**  
 Sensors for today's breakfast, lunch, dinner and side are created for easy use on dashboards.
 
-**Services**  
-A `mealie.add_shopping_list_item` service allows you to add note type items to your Mealie shopping list.  
-This takes the shopping_list_id and item (note) as parameters.  
-The shopping_list_id can be found in the attributes of the to-do list.  
 
 ## Installation
 

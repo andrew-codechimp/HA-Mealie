@@ -39,21 +39,5 @@
                 "name": "Today's side"
             }
         }
-    },
-    "services": {
-        "add_shopping_list_item": {
-            "description": "Add an item to a shopping list.",
-            "fields": {
-                "shopping_list_id": {
-                    "description": "The shopping list id (can be found in attributes of the todo entity).",
-                    "name": "Shopping List ID"
-                },
-                "item": {
-                    "description": "The shopping list item to add.",
-                    "name": "Item"
-                }
-            },
-            "name": "Add shopping list item"
-        }
     }
 }

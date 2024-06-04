@@ -29,8 +29,6 @@ from .const import (
     MIN_HA_VERSION,
     DOMAIN_CONFIG,
     COORDINATOR,
-    SERVICE_ADD_SHOPPING_LIST_ITEM,
-    SERVICE_ADD_SHOPPING_LIST_ITEM_SCHEMA,
     CONF_GROUP_ID,
     CONF_BREAKFAST_START,
     CONF_BREAKFAST_END,
@@ -38,8 +36,6 @@ from .const import (
     CONF_LUNCH_END,
     CONF_DINNER_START,
     CONF_DINNER_END,
-    ATTR_SHOPPING_LIST_ID,
-    ATTR_SHOPPING_LIST_ITEM,
 )
 
 from .api import MealieApiClient
@@ -94,8 +90,6 @@ async def async_setup(
         DOMAIN_CONFIG: domain_config,
     }
 
-    register_services(hass)
-
     return True
 
 
@@ -145,42 +139,3 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 async def async_update_options(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Update options."""
     await hass.config_entries.async_reload(entry.entry_id)
-
-
-@callback
-def register_services(hass: HomeAssistant):
-    """Register services used by battery notes component."""
-
-    async def handle_add_shopping_list_item(call):
-        """Handle the service call."""
-        shopping_list_id = call.data.get(ATTR_SHOPPING_LIST_ID, "")
-        item = call.data.get(ATTR_SHOPPING_LIST_ITEM, "")
-
-        coordinator: MealieDataUpdateCoordinator = hass.data[DOMAIN][COORDINATOR]
-
-        if shopping_list_id not in coordinator.shopping_list_items:
-            raise ServiceValidationError("Shopping list not found")
-
-        position = (
-            coordinator.shopping_list_items[shopping_list_id][-1].get("position") + 1
-        )
-
-        await coordinator.api.async_add_shopping_list_item(
-            shopping_list_id=shopping_list_id, summary=item, position=position
-        )
-
-        if coordinator.api.error:
-            raise ServiceValidationError("An error occured adding the item")
-
-        await coordinator.async_request_refresh()
-
-        LOGGER.debug("Item added to shopping list %s", shopping_list_id)
-
-        return
-
-    hass.services.async_register(
-        DOMAIN,
-        SERVICE_ADD_SHOPPING_LIST_ITEM,
-        handle_add_shopping_list_item,
-        schema=SERVICE_ADD_SHOPPING_LIST_ITEM_SCHEMA,
-    )
