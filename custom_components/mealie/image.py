@@ -137,6 +137,7 @@ class MealieImage(MealieEntity, ImageEntity):
                 self.current_image = await self.hass.async_add_executor_job(
                     mealie_logo_path.read_bytes
                 )
+                self._attr_content_type = "image/png"
                 return self.current_image
             self._cached_image = image
             self.current_image = image
@@ -145,4 +146,5 @@ class MealieImage(MealieEntity, ImageEntity):
         self.current_image = await self.hass.async_add_executor_job(
             mealie_logo_path.read_bytes
         )
+        self._attr_content_type = "image/png"
         return self.current_image
