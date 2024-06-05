@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from dataclasses import dataclass
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.config_entries import ConfigEntry
@@ -12,7 +13,7 @@ from homeassistant.components.image import (
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import UNDEFINED
 
-from .const import DOMAIN, COORDINATOR
+from .const import DOMAIN, COORDINATOR, MEALIE_LOGO
 from .entity import MealieEntity
 from .coordinator import MealieDataUpdateCoordinator
 
@@ -66,6 +67,7 @@ class MealieImage(MealieEntity, ImageEntity):
     """Mealie Image class."""
 
     entity_description: ImageEntityDescription
+    current_image: bytes | None = None
 
     def __init__(
         self,
@@ -82,6 +84,7 @@ class MealieImage(MealieEntity, ImageEntity):
         self.entity_description = entity_description
         self.coordinator = coordinator
         self._attr_has_entity_name = True
+        self.current_image = None
 
     async def async_added_to_hass(self) -> None:
         """Handle added to Hass."""
@@ -117,17 +120,29 @@ class MealieImage(MealieEntity, ImageEntity):
             )
         return None
 
+    def image(self) -> bytes | None:
+        """Return bytes of image."""
+
+        return self.current_image
+
     async def async_image(self) -> bytes | None:
         """Return bytes of image."""
 
+        mealie_logo_path = Path(__file__).parent / MEALIE_LOGO
+
         if self._cached_image:
             return self._cached_image.content
-        if self.image_url is None:
-            return None
         if (url := self.image_url) is not UNDEFINED:
             if not url or (image := await self._async_load_image_from_url(url)) is None:
-                return None
+                self.current_image = await self.hass.async_add_executor_job(
+                    mealie_logo_path.read_bytes
+                )
+                return self.current_image
             self._cached_image = image
+            self.current_image = image
             self._attr_content_type = "image/webp"
             return image.content
-        return await self.hass.async_add_executor_job(self.image)
+        self.current_image = await self.hass.async_add_executor_job(
+            mealie_logo_path.read_bytes
+        )
+        return self.current_image

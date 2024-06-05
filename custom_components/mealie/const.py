@@ -20,6 +20,7 @@ MANUFACTURER = "@Andrew-CodeChimp"
 
 DOMAIN_CONFIG = "config"
 COORDINATOR = "coordinator"
+MEALIE_LOGO = "mealie.png"
 
 SERVICE_ADD_SHOPPING_LIST_ITEM = "add_shopping_list_item"
 
