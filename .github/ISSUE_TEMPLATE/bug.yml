@@ -5,7 +5,7 @@ labels: "Bug"
 body:
 - type: markdown
   attributes:
-    value: Before you open a new issue, search through the existing issues to see if others have had the same problem.
+    value: Before you open a new issue, search through the existing issues to see if others have had the same problem. If this is a feature request please raise it [here](https://github.com/andrew-codechimp/HA-Mealie/discussions/categories/feature-requests).
 - type: textarea
   attributes:
     label: "System Health details"
