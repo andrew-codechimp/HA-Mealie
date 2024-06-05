@@ -53,7 +53,7 @@ async def async_setup_entry(
 
 
 class MealieSensor(MealieEntity, SensorEntity):
-    """MastodonProfileStats Sensor class."""
+    """Mealie Sensor class."""
 
     entity_description: SensorEntityDescription
 

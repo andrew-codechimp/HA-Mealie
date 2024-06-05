@@ -41,7 +41,12 @@ from .const import (
 from .api import MealieApiClient
 from .coordinator import MealieDataUpdateCoordinator
 
-PLATFORMS: list[Platform] = [Platform.TODO, Platform.CALENDAR, Platform.SENSOR]
+PLATFORMS: list[Platform] = [
+    Platform.TODO,
+    Platform.CALENDAR,
+    Platform.SENSOR,
+    Platform.IMAGE,
+]
 
 CONFIG_SCHEMA = vol.Schema(
     {
