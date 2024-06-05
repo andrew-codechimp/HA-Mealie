@@ -38,6 +38,20 @@
             "todays_side": {
                 "name": "Heutige Beilage"
             }
+        },
+        "image": {
+            "todays_breakfast": {
+                "name": "Heutiges Frühstück"
+            },
+            "todays_lunch": {
+                "name": "Heutiges Mittagessen"
+            },
+            "todays_dinner": {
+                "name": "Heutiges Abendessen"
+            },
+            "todays_side": {
+                "name": "Heutige Beilage"
+            }
         }
     }
 }

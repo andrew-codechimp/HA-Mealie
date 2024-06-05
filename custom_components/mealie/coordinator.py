@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -39,10 +39,10 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
         self.last_breakfast_image_update = None
         self.last_lunch_image = None
         self.last_lunch_image_update = None
-        self.last_dinner_image = None
-        self.last_dinner_image_update = None
-        self.last_side_image = None
-        self.last_side_image_update = None
+        self.last_dinner_image: datetime | None = None
+        self.last_dinner_image_update: datetime | None = None
+        self.last_side_image: datetime | None = None
+        self.last_side_image_update: datetime | None = None
 
         super().__init__(
             hass=hass,
@@ -104,11 +104,11 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         url = self.api.async_get_recipe_image_url(plan["recipeId"])
                         if url != self.last_breakfast_image:
                             self.last_breakfast_image = url
-                            self.last_breakfast_image_update = dt_util.now
+                            self.last_breakfast_image_update = dt_util.now()
                         return url
         if self.last_breakfast_image != None:
             self.last_breakfast_image = None
-            self.last_breakfast_image_update = dt_util.now
+            self.last_breakfast_image_update = dt_util.now()
         return None
 
     def todays_lunch_image(self) -> str | None:
@@ -120,11 +120,11 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         url = self.api.async_get_recipe_image_url(plan["recipeId"])
                         if url != self.last_lunch_image:
                             self.last_lunch_image = url
-                            self.last_lunch_image_update = dt_util.now
+                            self.last_lunch_image_update = dt_util.now()
                         return url
         if self.last_lunch_image != None:
             self.last_lunch_image = None
-            self.llast_lunch_image_update = dt_util.now
+            self.llast_lunch_image_update = dt_util.now()
         return None
 
     def todays_dinner_image(self) -> str | None:
@@ -136,11 +136,11 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         url = self.api.async_get_recipe_image_url(plan["recipeId"])
                         if url != self.last_dinner_image:
                             self.last_dinner_image = url
-                            self.last_dinner_image_update = dt_util.now
+                            self.last_dinner_image_update = dt_util.now()
                         return url
         if self.last_dinner_image != None:
             self.last_dinner_image = None
-            self.last_dinner_image_update = dt_util.utcnow
+            self.last_dinner_image_update = dt_util.now()
         return None
 
     def todays_side_image(self) -> str | None:
@@ -152,11 +152,11 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         url = self.api.async_get_recipe_image_url(plan["recipeId"])
                         if url != self.last_side_image:
                             self.last_side_image = url
-                            self.last_side_image_update = dt_util.now
+                            self.last_side_image_update = dt_util.now()
                         return url
         if self.last_side_image != None:
             self.last_side_image = None
-            self.last_side_image_update = dt_util.now
+            self.last_side_image_update = dt_util.now()
         return None
 
     async def async_get_shopping_lists(self) -> dict:

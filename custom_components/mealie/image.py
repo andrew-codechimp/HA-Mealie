@@ -9,9 +9,7 @@ from homeassistant.components.image import (
     ImageEntity,
     ImageEntityDescription,
 )
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.util import dt as dt_util
 from homeassistant.helpers.typing import UNDEFINED
 
 from .const import DOMAIN, COORDINATOR
@@ -45,10 +43,6 @@ class Image:
 
     content_type: str
     content: bytes
-
-
-class ImageContentTypeError(HomeAssistantError):
-    """Error with the content type while loading an image."""
 
 
 async def async_setup_entry(
@@ -97,29 +91,20 @@ class MealieImage(MealieEntity, ImageEntity):
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
 
-        print(self.coordinator.todays_breakfast_image())
-        print(self.coordinator.todays_lunch_image())
-        print(self.coordinator.todays_dinner_image())
-        print(self.coordinator.todays_side_image())
-
-        self._attr_image_last_updated = dt_util.now()
+        self._cached_image = None
 
         if self.entity_description.key == "todays_breakfast":
             self._attr_image_url = self.coordinator.todays_breakfast_image()
-            self._cached_image = None
-            # self._attr_image_last_updated = self.coordinator.last_breakfast_image_update
+            self._attr_image_last_updated = self.coordinator.last_breakfast_image_update
         if self.entity_description.key == "todays_lunch":
             self._attr_image_url = self.coordinator.todays_lunch_image()
-            self._cached_image = None
-            # self._attr_image_last_updated = self.coordinator.last_lunch_image_update
+            self._attr_image_last_updated = self.coordinator.last_lunch_image_update
         if self.entity_description.key == "todays_dinner":
             self._attr_image_url = self.coordinator.todays_dinner_image()
-            self._cached_image = None
-            # self._attr_image_last_updated = self.coordinator.last_dinner_image_update
+            self._attr_image_last_updated = self.coordinator.last_dinner_image_update
         if self.entity_description.key == "todays_side":
             self._attr_image_url = self.coordinator.todays_side_image()
-            self._cached_image = None
-            # self._attr_image_last_updated = self.coordinator.last_side_image_update
+            self._attr_image_last_updated = self.coordinator.last_side_image_update
 
         super()._handle_coordinator_update()
 
@@ -137,6 +122,8 @@ class MealieImage(MealieEntity, ImageEntity):
 
         if self._cached_image:
             return self._cached_image.content
+        if self.image_url is None:
+            return None
         if (url := self.image_url) is not UNDEFINED:
             if not url or (image := await self._async_load_image_from_url(url)) is None:
                 return None
