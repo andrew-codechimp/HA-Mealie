@@ -2,41 +2,41 @@
     "config": {
         "step": {
             "user": {
-                "description": "Enter your mealie address and API token for your account.",
+                "description": "Geben Sie Ihre mealie-Adresse und API-Token für Ihr Konto ein.",
                 "data": {
                     "host": "Host",
                     "token": "Token"
                 }
             },
             "reauth_confirm": {
-                "title": "Mealie - Reauthentication",
-                "description": "Your account is unable to authenticate. Click Submit to re-setup."
+                "title": "Mealie Re-Authentifizierung",
+                "description": "Ihr Konto kann sich nicht authentifizieren. Klicken Sie zum erneuten Einrichten auf Absenden."
             }
         },
         "abort": {
-            "already_configured": "Only one instance of Mealie is allowed",
-            "single_instance_allowed": "Only one instance of Mealie is allowed",
-            "reauth_successful": "Reauthentication Successful"
+            "already_configured": "Nur eine Instanz von Mealie ist erlaubt",
+            "single_instance_allowed": "Nur eine Instanz von Mealie ist erlaubt",
+            "reauth_successful": "Re-Authentifizierung erfolgreich"
         },
         "error": {
-            "no_connection": "Unable to connect to Mealie server.",
-            "401": "Unable to connect or your token is invalid.",
-            "unknown": "Unknown error occurred."
+            "no_connection": "Verbindung zum Mealie Server nicht möglich",
+            "401": "Verbindung fehlgeschlagen oder Ihr Token ist ungültig.",
+            "unknown": "Ein unbekannter Fehler ist aufgetreten."
         }
     },
     "entity": {
         "sensor": {
             "todays_breakfast": {
-                "name": "Today's breakfast"
+                "name": "Heutiges Frühstück"
             },
             "todays_lunch": {
-                "name": "Today's lunch"
+                "name": "Heutiges Mittagessen"
             },
             "todays_dinner": {
-                "name": "Today's dinner"
+                "name": "Heutiges Abendessen"
             },
             "todays_side": {
-                "name": "Today's side"
+                "name": "Heutige Beilage"
             }
         }
     }
