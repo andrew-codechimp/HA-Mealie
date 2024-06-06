@@ -132,6 +132,7 @@ class MealieImage(MealieEntity, ImageEntity):
 
         if self._cached_image:
             return self._cached_image.content
+
         if (url := self.image_url) is not UNDEFINED:
             if not url or (image := await self._async_load_image_from_url(url)) is None:
                 self.current_image = await self.hass.async_add_executor_job(

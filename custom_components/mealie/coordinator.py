@@ -100,7 +100,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
         if self.meal_plan:
             for plan in self.meal_plan:
                 if plan.get("entryType") == "breakfast":
-                    if plan["recipeId"]:
+                    if plan["recipeId"] and plan["recipe"]["image"]:
                         url = self.api.async_get_recipe_image_url(plan["recipeId"])
                         if url != self.last_breakfast_image:
                             self.last_breakfast_image = url
@@ -108,7 +108,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         return url
         if self.last_breakfast_image != None:
             self.last_breakfast_image = None
-            self.last_breakfast_image_update = dt_util.now()
+            self.last_breakfast_image_update = None
         return None
 
     def todays_lunch_image(self) -> str | None:
@@ -116,7 +116,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
         if self.meal_plan:
             for plan in self.meal_plan:
                 if plan.get("entryType") == "lunch":
-                    if plan["recipeId"]:
+                    if plan["recipeId"] and plan["recipe"]["image"]:
                         url = self.api.async_get_recipe_image_url(plan["recipeId"])
                         if url != self.last_lunch_image:
                             self.last_lunch_image = url
@@ -124,7 +124,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         return url
         if self.last_lunch_image != None:
             self.last_lunch_image = None
-            self.last_lunch_image_update = dt_util.now()
+            self.last_lunch_image_update = None
         return None
 
     def todays_dinner_image(self) -> str | None:
@@ -132,7 +132,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
         if self.meal_plan:
             for plan in self.meal_plan:
                 if plan.get("entryType") == "dinner":
-                    if plan["recipeId"]:
+                    if plan["recipeId"] and plan["recipe"]["image"]:
                         url = self.api.async_get_recipe_image_url(plan["recipeId"])
                         if url != self.last_dinner_image:
                             self.last_dinner_image = url
@@ -140,7 +140,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         return url
         if self.last_dinner_image != None:
             self.last_dinner_image = None
-            self.last_dinner_image_update = dt_util.now()
+            self.last_dinner_image_update = None
         return None
 
     def todays_side_image(self) -> str | None:
@@ -156,7 +156,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         return url
         if self.last_side_image != None:
             self.last_side_image = None
-            self.last_side_image_update = dt_util.now()
+            self.last_side_image_update = None
         return None
 
     async def async_get_shopping_lists(self) -> dict:
