@@ -124,7 +124,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         return url
         if self.last_lunch_image != None:
             self.last_lunch_image = None
-            self.llast_lunch_image_update = dt_util.now()
+            self.last_lunch_image_update = dt_util.now()
         return None
 
     def todays_dinner_image(self) -> str | None:
