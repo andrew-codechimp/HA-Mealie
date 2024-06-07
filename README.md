@@ -28,7 +28,7 @@ Creates a Mealie calendar within Home Assistant, this is read only and creates a
 Sensors for today's breakfast, lunch, dinner and side are created for easy use on dashboards.  
 An attribute recipe_url provides a link to the recipe.
 
-**Images**
+**Images**  
 Images for today's breakfast, lunch, dinner and side, if a meal is a note or the recipe does not have an image the Mealie logo is displayed and the state becomes Unknown, allowing you to conditionally show/hide the image.  
 An attribute recipe_url provides a link to the recipe.
 
