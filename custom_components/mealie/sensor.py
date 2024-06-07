@@ -73,6 +73,7 @@ class MealieSensor(MealieEntity, SensorEntity):
         self.entity_description = entity_description
         self.coordinator = coordinator
         self._attr_has_entity_name = True
+        self._attr_icon = "mdi:silverware-variant"
 
     async def async_added_to_hass(self) -> None:
         """Handle added to Hass."""
