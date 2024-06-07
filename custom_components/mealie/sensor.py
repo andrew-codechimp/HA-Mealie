@@ -10,7 +10,7 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, COORDINATOR
+from .const import DOMAIN, COORDINATOR, ATTR_RECIPE_URL
 from .entity import MealieEntity
 from .coordinator import MealieDataUpdateCoordinator
 
@@ -99,3 +99,25 @@ class MealieSensor(MealieEntity, SensorEntity):
     def native_value(self) -> str | None:
         """Return the native value of the sensor."""
         return self._native_value
+
+    @property
+    def extra_state_attributes(self) -> dict[str, str] | None:
+        """Return the state attributes."""
+
+        if self.entity_description.key == "todays_breakfast":
+            url = self.coordinator.todays_breakfast_recipe_url()
+        if self.entity_description.key == "todays_lunch":
+            url = self.coordinator.todays_lunch_recipe_url()
+        if self.entity_description.key == "todays_dinner":
+            url = self.coordinator.todays_dinner_recipe_url()
+        if self.entity_description.key == "todays_side":
+            url = self.coordinator.todays_side_recipe_url()
+
+        attrs = {
+            ATTR_RECIPE_URL: url,
+        }
+
+        super_attrs = super().extra_state_attributes
+        if super_attrs:
+            attrs.update(super_attrs)
+        return attrs

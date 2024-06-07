@@ -159,6 +159,46 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
             self.last_side_image_update = None
         return None
 
+    def todays_breakfast_recipe_url(self) -> str | None:
+        """Return today's breakfast recipe url."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "breakfast":
+                    if plan["recipeId"]:
+                        url = self.api.async_get_recipe_url(plan["recipe"]["slug"])
+                        return url
+        return None
+
+    def todays_lunch_recipe_url(self) -> str | None:
+        """Return today's lunch recipe url."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "lunch":
+                    if plan["recipeId"]:
+                        url = self.api.async_get_recipe_url(plan["recipe"]["slug"])
+                        return url
+        return None
+
+    def todays_dinner_recipe_url(self) -> str | None:
+        """Return today's dinner recipe url."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "dinner":
+                    if plan["recipeId"]:
+                        url = self.api.async_get_recipe_url(plan["recipe"]["slug"])
+                        return url
+        return None
+
+    def todays_side_recipe_url(self) -> str | None:
+        """Return today's side recipe url."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "side":
+                    if plan["recipeId"]:
+                        url = self.api.async_get_recipe_url(plan["recipe"]["slug"])
+                        return url
+        return None
+
     async def async_get_shopping_lists(self) -> dict:
         """Return shopping lists  fetched at most once."""
         if self._shopping_lists is None:

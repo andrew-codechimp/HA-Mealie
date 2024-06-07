@@ -117,7 +117,7 @@ class MealieTodoListEntity(MealieEntity, TodoListEntity):
         """When entity is added to hass update state from existing coordinator data."""
         await super().async_added_to_hass()
 
-        self.coordinator.async_refresh
+        self.coordinator.async_refresh()
 
         self._handle_coordinator_update()
 
@@ -197,13 +197,6 @@ class MealieTodoListEntity(MealieEntity, TodoListEntity):
             )
             position += 1
         await self.coordinator.async_refresh()
-
-    # async def async_added_to_hass(self) -> None:
-    #     """Entity has been added to hass."""
-    #     # Shopping list integration doesn't currently support config entry unload
-    #     # so this code may not be used in practice, however it is here in case
-    #     # this changes in the future.
-    #     self.async_on_remove(self._data.async_add_listener(self.async_write_ha_state))
 
     @callback
     def _handle_coordinator_update(self) -> None:
