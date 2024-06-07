@@ -25,8 +25,12 @@ Given that Home Assistant To-do items are more simplistic, if you edit a Mealie 
 Creates a Mealie calendar within Home Assistant, this is read only and creates appropriate time slots for breakfast, lunch and dinner (see below for how to change the time slots.)
 
 **Sensors**  
-Sensors for today's breakfast, lunch, dinner and side are created for easy use on dashboards.
+Sensors for today's breakfast, lunch, dinner and side are created for easy use on dashboards.  
+An attribute recipe_url provides a link to the recipe.
 
+**Images**
+Images for today's breakfast, lunch, dinner and side, if a meal is a note or the recipe does not have an image the Mealie logo is displayed and the state becomes Unknown, allowing you to conditionally show/hide the image.  
+An attribute recipe_url provides a link to the recipe.
 
 ## Installation
 

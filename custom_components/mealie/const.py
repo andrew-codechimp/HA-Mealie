@@ -20,6 +20,7 @@ MANUFACTURER = "@Andrew-CodeChimp"
 
 DOMAIN_CONFIG = "config"
 COORDINATOR = "coordinator"
+MEALIE_LOGO = "mealie.png"
 
 SERVICE_ADD_SHOPPING_LIST_ITEM = "add_shopping_list_item"
 
@@ -33,3 +34,4 @@ CONF_DINNER_START = "dinner_start"
 CONF_DINNER_END = "dinner_end"
 
 ATTR_SHOPPING_LIST_ID = "shopping_list_id"
+ATTR_RECIPE_URL = "recipe_url"

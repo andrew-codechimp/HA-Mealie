@@ -114,6 +114,14 @@ class MealieApiClient:
 
         return await self.api_wrapper("get", "/api/groups/mealplans/today", data=params)
 
+    def async_get_recipe_image_url(self, recipe_id: str) -> str:
+        """Construct a url for the recipe image."""
+        return self.http_normalize_slashes(f"/api/media/recipes/{recipe_id}/images/min-original.webp")
+
+    def async_get_recipe_url(self, recipe_slug: str) -> str:
+        """Construct a url for the recipe."""
+        return self.http_normalize_slashes(f"/g/home/r/{recipe_slug}")
+
     async def api_wrapper(self, method: str, service: str, data: dict = {}) -> any:
         """Get information from the API."""
 

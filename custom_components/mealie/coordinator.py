@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.util import dt as dt_util
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
     UpdateFailed,
@@ -34,6 +35,14 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
         self._shopping_lists: dict | None = None
         self.shopping_list_items: dict = {}
         self.meal_plan: dict = {}
+        self.last_breakfast_image = None
+        self.last_breakfast_image_update = None
+        self.last_lunch_image = None
+        self.last_lunch_image_update = None
+        self.last_dinner_image: datetime | None = None
+        self.last_dinner_image_update: datetime | None = None
+        self.last_side_image: datetime | None = None
+        self.last_side_image_update: datetime | None = None
 
         super().__init__(
             hass=hass,
@@ -84,6 +93,110 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                         return plan["recipe"]["name"]
                     else:
                         return plan["title"]
+        return None
+
+    def todays_breakfast_image(self) -> str | None:
+        """Return today's breakfast image."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "breakfast":
+                    if plan["recipeId"] and plan["recipe"]["image"]:
+                        url = self.api.async_get_recipe_image_url(plan["recipeId"])
+                        if url != self.last_breakfast_image:
+                            self.last_breakfast_image = url
+                            self.last_breakfast_image_update = dt_util.now()
+                        return url
+        if self.last_breakfast_image is not None:
+            self.last_breakfast_image = None
+            self.last_breakfast_image_update = None
+        return None
+
+    def todays_lunch_image(self) -> str | None:
+        """Return today's lunch."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "lunch":
+                    if plan["recipeId"] and plan["recipe"]["image"]:
+                        url = self.api.async_get_recipe_image_url(plan["recipeId"])
+                        if url != self.last_lunch_image:
+                            self.last_lunch_image = url
+                            self.last_lunch_image_update = dt_util.now()
+                        return url
+        if self.last_lunch_image is not None:
+            self.last_lunch_image = None
+            self.last_lunch_image_update = None
+        return None
+
+    def todays_dinner_image(self) -> str | None:
+        """Return today's dinner image."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "dinner":
+                    if plan["recipeId"] and plan["recipe"]["image"]:
+                        url = self.api.async_get_recipe_image_url(plan["recipeId"])
+                        if url != self.last_dinner_image:
+                            self.last_dinner_image = url
+                            self.last_dinner_image_update = dt_util.now()
+                        return url
+        if self.last_dinner_image is not None:
+            self.last_dinner_image = None
+            self.last_dinner_image_update = None
+        return None
+
+    def todays_side_image(self) -> str | None:
+        """Return today's side image."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "side":
+                    if plan["recipeId"]:
+                        url = self.api.async_get_recipe_image_url(plan["recipeId"])
+                        if url != self.last_side_image:
+                            self.last_side_image = url
+                            self.last_side_image_update = dt_util.now()
+                        return url
+        if self.last_side_image is not None:
+            self.last_side_image = None
+            self.last_side_image_update = None
+        return None
+
+    def todays_breakfast_recipe_url(self) -> str | None:
+        """Return today's breakfast recipe url."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "breakfast":
+                    if plan["recipeId"]:
+                        url = self.api.async_get_recipe_url(plan["recipe"]["slug"])
+                        return url
+        return None
+
+    def todays_lunch_recipe_url(self) -> str | None:
+        """Return today's lunch recipe url."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "lunch":
+                    if plan["recipeId"]:
+                        url = self.api.async_get_recipe_url(plan["recipe"]["slug"])
+                        return url
+        return None
+
+    def todays_dinner_recipe_url(self) -> str | None:
+        """Return today's dinner recipe url."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "dinner":
+                    if plan["recipeId"]:
+                        url = self.api.async_get_recipe_url(plan["recipe"]["slug"])
+                        return url
+        return None
+
+    def todays_side_recipe_url(self) -> str | None:
+        """Return today's side recipe url."""
+        if self.meal_plan:
+            for plan in self.meal_plan:
+                if plan.get("entryType") == "side":
+                    if plan["recipeId"]:
+                        url = self.api.async_get_recipe_url(plan["recipe"]["slug"])
+                        return url
         return None
 
     async def async_get_shopping_lists(self) -> dict:
