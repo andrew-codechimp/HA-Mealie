@@ -106,7 +106,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                             self.last_breakfast_image = url
                             self.last_breakfast_image_update = dt_util.now()
                         return url
-        if self.last_breakfast_image != None:
+        if self.last_breakfast_image is not None:
             self.last_breakfast_image = None
             self.last_breakfast_image_update = None
         return None
@@ -122,7 +122,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                             self.last_lunch_image = url
                             self.last_lunch_image_update = dt_util.now()
                         return url
-        if self.last_lunch_image != None:
+        if self.last_lunch_image is not None:
             self.last_lunch_image = None
             self.last_lunch_image_update = None
         return None
@@ -138,7 +138,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                             self.last_dinner_image = url
                             self.last_dinner_image_update = dt_util.now()
                         return url
-        if self.last_dinner_image != None:
+        if self.last_dinner_image is not None:
             self.last_dinner_image = None
             self.last_dinner_image_update = None
         return None
@@ -154,7 +154,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
                             self.last_side_image = url
                             self.last_side_image_update = dt_util.now()
                         return url
-        if self.last_side_image != None:
+        if self.last_side_image is not None:
             self.last_side_image = None
             self.last_side_image_update = None
         return None
