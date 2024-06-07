@@ -38,6 +38,20 @@
             "todays_side": {
                 "name": "Today's side"
             }
+        },
+        "image": {
+            "todays_breakfast": {
+                "name": "Today's breakfast"
+            },
+            "todays_lunch": {
+                "name": "Today's lunch"
+            },
+            "todays_dinner": {
+                "name": "Today's dinner"
+            },
+            "todays_side": {
+                "name": "Today's side"
+            }
         }
     }
 }
