@@ -7,8 +7,6 @@
 [![hacs][hacsbadge]][hacs]
 
 
-**Early beta, use at own risk**
-
 Mealie integration for Home Assistant
 
 *Please :star: this repo if you find it useful*  
