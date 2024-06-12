@@ -117,7 +117,7 @@ class MealieTodoListEntity(MealieEntity, TodoListEntity):
         """When entity is added to hass update state from existing coordinator data."""
         await super().async_added_to_hass()
 
-        self.coordinator.async_refresh()
+        await self.coordinator.async_refresh()
 
         self._handle_coordinator_update()
 
