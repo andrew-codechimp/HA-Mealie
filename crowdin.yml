@@ -6,6 +6,18 @@
 files: [
   {
     "source": "/custom_components/mealie/translations/en.json",
-    "translation": "/custom_components/mealie/translations/%two_letters_code%.json",
+    "translation": "/custom_components/mealie/translations/%locale%.json",
+    "languages_mapping": {
+            "locale": {
+                "de": "de",
+                "el": "el",
+                "en": "en",
+                "es-ES": "es-ES",
+                "fr": "fr",
+                "it": "it",
+                "sk": "sk",
+                "sl": "sl"                
+            }
+        }    
   }
 ]
