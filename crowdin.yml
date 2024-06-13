@@ -16,7 +16,8 @@ files: [
                 "fr": "fr",
                 "it": "it",
                 "sk": "sk",
-                "sl": "sl"                
+                "sl": "sl",
+                "sr-CS": "sr-Latn",                
             }
         }    
   }
