@@ -124,12 +124,14 @@ class MealieTodoListEntity(MealieEntity, TodoListEntity):
     async def async_create_todo_item(self, item: TodoItem) -> None:
         """Add an item to the list."""
 
-        position = (
-            self.coordinator.shopping_list_items[self._shopping_list_id][-1].get(
-                "position"
+        position = 0
+        if len(self.coordinator.shopping_list_items[self._shopping_list_id]) > 0:
+            position = (
+                self.coordinator.shopping_list_items[self._shopping_list_id][-1].get(
+                    "position"
+                )
+                + 1
             )
-            + 1
-        )
 
         await self.coordinator.api.async_add_shopping_list_item(
             self._shopping_list_id, item.summary, position
