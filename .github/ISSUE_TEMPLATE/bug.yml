@@ -16,6 +16,8 @@ body:
   attributes:
     label: Checklist
     options:
+      - label: I am not raising a bug about the HA core default Mealie integration (multiple mealplan calendars rather than one). I did not write that or maintain it.
+        required: true    
       - label: I have enabled debug logging for my installation.
         required: true
       - label: I have filled out the issue template to the best of my ability.
