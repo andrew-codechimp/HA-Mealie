@@ -41,7 +41,7 @@ class MealieApiClient:
 
         params = {"orderBy": "position", "orderDirection": "asc", "perPage": "1000"}
         params["group_id"] = group_id
-        params["queryFilter"] = f"shopping_list_id={shopping_list_id}"
+        params["queryFilter"] = f"shoppingListId={shopping_list_id}"
 
         return await self.api_wrapper("get", "/api/groups/shopping/items", data=params)
 
@@ -79,6 +79,7 @@ class MealieApiClient:
         data["quantity"] = item["quantity"]
         data["labelId"] = item["labelId"]
         data["note"] = item["note"]
+        data["checked"] = item["checked"]
 
         if item["isFood"]:
             data["foodId"] = item["foodId"]

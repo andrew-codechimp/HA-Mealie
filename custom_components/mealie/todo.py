@@ -142,13 +142,24 @@ class MealieTodoListEntity(MealieEntity, TodoListEntity):
         """Update an item on the list."""
 
         list_items = self.coordinator.shopping_list_items[self._shopping_list_id]
+
         for list_item in list_items:
             if list_item["id"] == item.uid:
-                list_item["note"] = item.summary
-                list_item["isFood"] = "False"
-                list_item["foodId"] = None
-                list_item["quantity"] = "0.0"
-                list_item["checked"] = item.status == TodoItemStatus.COMPLETED
+                position = list_item["position"]
+                break
+
+        list_items = self.coordinator.shopping_list_items[self._shopping_list_id]
+        for list_item in list_items:
+            if list_item["id"] == item.uid:
+                if list_item["display"] == item.summary:
+                    list_item["checked"] = item.status == TodoItemStatus.COMPLETED
+                else:
+                    list_item["note"] = item.summary
+                    list_item["position"] = position
+                    list_item["isFood"] = "False"
+                    list_item["foodId"] = None
+                    list_item["quantity"] = "0.0"
+                    list_item["checked"] = item.status == TodoItemStatus.COMPLETED
 
                 await self.coordinator.api.async_update_shopping_list_item(
                     self._shopping_list_id, item.uid, list_item
@@ -189,8 +200,11 @@ class MealieTodoListEntity(MealieEntity, TodoListEntity):
         if previous_uid is None:
             previous_uid_index = -1
 
+        if previous_uid_index < old_uid_index:
+            previous_uid_index += 1
+
         list_items.pop(old_uid_index)
-        list_items.insert(previous_uid_index + 1, item_to_move)
+        list_items.insert(previous_uid_index, item_to_move)
 
         position = 0
         for item in list_items:
