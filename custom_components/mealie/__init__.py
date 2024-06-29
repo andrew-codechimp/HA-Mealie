@@ -29,7 +29,6 @@ from .const import (
     MIN_HA_VERSION,
     DOMAIN_CONFIG,
     COORDINATOR,
-    CONF_GROUP_ID,
     CONF_BREAKFAST_START,
     CONF_BREAKFAST_END,
     CONF_LUNCH_START,
@@ -116,7 +115,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
 
     hass.data[DOMAIN][COORDINATOR] = coordinator = MealieDataUpdateCoordinator(
-        hass=hass, api=api, group_id=entry.data[CONF_GROUP_ID]
+        hass=hass, api=api
     )
 
     await coordinator.async_config_entry_first_refresh()

@@ -150,7 +150,7 @@ class MealieCalendarEntity(
         mealie_end_date = f"{end_date:%Y-%m-%d}"
 
         plans = await self.coordinator.api.async_get_meal_plans(
-            self.coordinator.group_id, mealie_start_date, mealie_end_date
+            mealie_start_date, mealie_end_date
         )
 
         events: list[CalendarEvent] = []

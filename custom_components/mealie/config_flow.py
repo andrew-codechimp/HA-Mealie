@@ -19,7 +19,6 @@ from .api import MealieApiClient
 from .const import (
     DOMAIN,
     LOGGER,
-    CONF_GROUP_ID,
 )
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
@@ -65,7 +64,6 @@ class MealieConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
             # Save instance
             if not errors:
-                user_input[CONF_GROUP_ID] = data.get("id")
                 if self._reauth_entry is None:
                     return self.async_create_entry(title="Mealie", data=user_input)
                 else:

@@ -29,18 +29,16 @@ class MealieApiClient:
         """Get current users group."""
         return await self.api_wrapper("get", "/api/groups/self")
 
-    async def async_get_shopping_lists(self, group_id: str) -> dict:
+    async def async_get_shopping_lists(self) -> dict:
         """Get all shopping lists for our group."""
-        params = {"group_id": group_id}
-        return await self.api_wrapper("get", "/api/groups/shopping/lists", data=params)
+        return await self.api_wrapper("get", "/api/groups/shopping/lists")
 
     async def async_get_shopping_list_items(
-        self, group_id: str, shopping_list_id: str
+        self, shopping_list_id: str
     ) -> dict:
         """Get all shopping list items."""
 
-        params = {"orderBy": "position", "orderDirection": "asc", "perPage": "1000"}
-        params["group_id"] = group_id
+        params = {"orderBy": "position", "orderDirection": "asc", "perPage": "-1"}
         params["queryFilter"] = f"shoppingListId={shopping_list_id}"
 
         return await self.api_wrapper("get", "/api/groups/shopping/items", data=params)
@@ -99,19 +97,17 @@ class MealieApiClient:
             "delete", f"/api/groups/shopping/items/{item_id}", data=data
         )
 
-    async def async_get_meal_plans(self, group_id: str, start_date: str, end_date: str) -> dict:
+    async def async_get_meal_plans(self, start_date: str, end_date: str) -> dict:
         """Get all meal plans for our group."""
-        params = {"orderBy": "date", "orderDirection": "asc", "perPage": "1000"}
-        params["group_id"] = group_id
+        params = {"orderBy": "date", "orderDirection": "asc", "perPage": "-1"}
         params["start_date"] = start_date
         params["end_date"] = end_date
 
         return await self.api_wrapper("get", "/api/groups/mealplans", data=params)
 
-    async def async_get_meal_plans_today(self, group_id: str) -> dict:
+    async def async_get_meal_plans_today(self) -> dict:
         """Get today's meal plans for our group."""
-        params = {"orderBy": "date", "orderDirection": "asc", "perPage": "1000"}
-        params["group_id"] = group_id
+        params = {"orderBy": "date", "orderDirection": "asc", "perPage": "-1"}
 
         return await self.api_wrapper("get", "/api/groups/mealplans/today", data=params)
 

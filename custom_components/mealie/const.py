@@ -24,8 +24,6 @@ MEALIE_LOGO = "mealie.png"
 
 SERVICE_ADD_SHOPPING_LIST_ITEM = "add_shopping_list_item"
 
-CONF_GROUP_ID = "group_id"
-
 CONF_BREAKFAST_START = "breakfast_start"
 CONF_BREAKFAST_END = "breakfast_end"
 CONF_LUNCH_START = "lunch_start"

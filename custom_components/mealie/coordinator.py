@@ -26,11 +26,9 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
         self,
         hass: HomeAssistant,
         api: MealieApiClient,
-        group_id: str,
     ) -> None:
         """Initialize."""
         self.api = api
-        self.group_id = group_id
 
         self._shopping_lists: dict | None = None
         self.shopping_list_items: dict = {}
@@ -203,16 +201,14 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
         """Return shopping lists  fetched at most once."""
         if self._shopping_lists is None:
 
-            result = await self.api.async_get_shopping_lists(self.group_id)
+            result = await self.api.async_get_shopping_lists()
 
             self._shopping_lists = result.get("items")
         return self._shopping_lists
 
     async def async_get_shopping_lists_items(self, shopping_list_id) -> dict:
         """Return shopping lists  fetched at most once."""
-        result = await self.api.async_get_shopping_list_items(
-            self.group_id, shopping_list_id
-        )
+        result = await self.api.async_get_shopping_list_items(shopping_list_id)
 
         items = result.get("items")
         return items
@@ -223,7 +219,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
         # Today's meal plan
 
         try:
-            result = await self.api.async_get_meal_plans_today(self.group_id)
+            result = await self.api.async_get_meal_plans_today()
 
             if self.api.error:
                 raise ConfigEntryAuthFailed(
@@ -243,9 +239,7 @@ class MealieDataUpdateCoordinator(DataUpdateCoordinator):
 
             for value in self._shopping_lists:
                 shopping_list_id = value.get("id")
-                result = await self.api.async_get_shopping_list_items(
-                    self.group_id, shopping_list_id
-                )
+                result = await self.api.async_get_shopping_list_items(shopping_list_id)
 
                 if self.api.error:
                     raise ConfigEntryAuthFailed(
