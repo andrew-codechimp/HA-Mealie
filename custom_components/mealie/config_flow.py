@@ -56,7 +56,7 @@ class MealieConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 async_get_clientsession(self.hass),
             )
 
-            data = await api.async_get_groups()
+            await api.async_get_groups()
 
             if api.error:
                 errors["base"] = api.error
