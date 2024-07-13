@@ -81,6 +81,11 @@ async def async_setup(
         LOGGER.critical(msg)
         return False
 
+    LOGGER.warning(
+        "This integration has been discontinued, "
+        "please delete within HACS and use the official integration https://www.home-assistant.io/integrations/mealie"
+    )
+
     domain_config: ConfigType = config.get(DOMAIN) or {
         CONF_BREAKFAST_START: "07:00",
         CONF_BREAKFAST_END: "11:00",
