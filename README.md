@@ -9,10 +9,11 @@
 
 Mealie integration for Home Assistant
 
-*Please :star: this repo if you find it useful*  
-*If you want to show your support please*
+## This integration will soon be retired ##
+There's an [official integration](https://www.home-assistant.io/integrations/mealie/) within Home Assistant that at the moment just provides calendars but in future will have feature parity with this integration.  If you are new here don't install this integration but get the official one and wait.
 
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png)](https://www.buymeacoffee.com/codechimp)
+
+
 
 ## Features
 **To-do lists**  
