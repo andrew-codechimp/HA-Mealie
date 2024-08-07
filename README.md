@@ -1,85 +1,18 @@
 # Home Assistant Mealie Integration
 
-[![GitHub Release][releases-shield]][releases]
-[![GitHub Activity][commits-shield]][commits]
-[![Downloads][download-latest-shield]](Downloads)
-[![License][license-shield]](LICENSE)
-[![hacs][hacsbadge]][hacs]
+**This integration has now been retired.**
 
+With the 2024.8 release of Home Assistant the official Mealie integration has been enhanced to include shopping lists and a lot more, meeting feature parity with this custom integration. Therefore I will be retiring this integration and am now a code owner for the official one and will continue improving/maintaining things there.
 
-Mealie integration for Home Assistant
+How do you remove the custom integration and move to core?
+* Within Settings, Devices & Services, Integrations, open Mealie.
+* Use the 3 dots to choose Delete
+* Then within HACS find Mealie, and choose Delete to remove the custom integration.
+* Restart HA
+* Go to Settings, Devices & Services, Integrations and click Add Integration
+* Search for Mealie and follow the integration steps.
 
-## This integration will soon be retired ##
-There's an [official integration](https://www.home-assistant.io/integrations/mealie/) within Home Assistant that at the moment just provides calendars but in future will have feature parity with this integration.  If you are new here don't install this integration but get the official one and wait.
+While things are a little different, particularly with the meal plan sensors, I have added an example template sensor in the [documentation](https://www.home-assistant.io/integrations/mealie/) to get you started.  The bonus here is you could create sensors for today, tomorrow etc and it will also cope with multiple dishes.
 
-
-
-
-## Features
-**To-do lists**  
-Mirrors your Mealie shopping lists.  
-Given that Home Assistant To-do items are more simplistic, if you edit a Mealie food item within Home Assistant it will be converted to a note type item within Mealie.
-
-**Calendar**  
-Creates a Mealie calendar within Home Assistant, this is read only and creates appropriate time slots for breakfast, lunch and dinner (see below for how to change the time slots.)
-
-**Sensors**  
-Sensors for today's breakfast, lunch, dinner and side are created for easy use on dashboards.  
-An attribute recipe_url provides a link to the recipe.
-
-**Images**  
-Images for today's breakfast, lunch, dinner and side, if a meal is a note or the recipe does not have an image the Mealie logo is displayed and the state becomes Unknown, allowing you to conditionally show/hide the image.  
-An attribute recipe_url provides a link to the recipe.
-
-## Installation
-
-### HACS
-
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=andrew-codechimp&repository=HA-Mealie&category=Integration)
-
-Restart Home Assistant  
-
-In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "Mealie"  
-
-You will need to provide your Mealie host name (e.g. `http://SERVERIP:PORT`) and an API token that is available from your user account section within Mealie.  Your Mealie user must be an administrator and have advanced features turned on to see this.
-
-### Manual Installation
-
-<details>
-<summary>Show detailed instructions</summary>
-
-Installation via HACS is recommended, but a manual setup is supported.
-
-1. Manually copy custom_components/mealie folder from latest release to custom_components folder in your config folder.
-1. Restart Home Assistant.
-1. In the HA UI go to "Configuration" -> "Integrations" click "+" and search for "Mealie"
-
-</details>
-
-
-
-## Calendar meal times
-If you want to modify the default meal times displayed in the calendar you can add the following to your `configuration.yaml`
-
-```
-mealie:
-  breakfast_start: "07:00"
-  breakfast_end: "11:00"
-  lunch_start: "11:30"
-  lunch_end: "14:00"
-  dinner_start: "16:00"
-  dinner_end: "21:00"
-```
-
-***
-
-[commits-shield]: https://img.shields.io/github/commit-activity/y/andrew-codechimp/HA-Mealie.svg?style=for-the-badge
-[commits]: https://github.com/andrew-codechimp/HA-Mealie/commits/main
-[hacs]: https://github.com/hacs/integration
-[hacsbadge]: https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge
-[exampleimg]: example.png
-[license-shield]: https://img.shields.io/github/license/andrew-codechimp/HA-Mealie.svg?style=for-the-badge
-[releases-shield]: https://img.shields.io/github/release/andrew-codechimp/HA-Mealie.svg?style=for-the-badge
-[releases]: https://github.com/andrew-codechimp/HA-Mealie/releases
-[download-latest-shield]: https://img.shields.io/github/downloads/andrew-codechimp/HA-Mealie/latest/total?style=for-the-badge
+Thanks to everyone who supported this integration.
 
