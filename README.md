@@ -1,8 +1,8 @@
 # Home Assistant Mealie Integration
 
-This integration has now been retired.
+**This integration has now been retired.**
 
-With the 2024.8 release of Home Assistant the official Mealie integration has been enhanced to include shopping lists and a lot more, now meeting feature parity with this custom integration.
+With the 2024.8 release of Home Assistant the official Mealie integration has been enhanced to include shopping lists and a lot more, meeting feature parity with this custom integration. Therefore I will be retiring this integration and am now a code owner for the official one and will continue improving/maintaining things there.
 
 How do you remove the custom integration and move to core?
 * Within Settings, Devices & Services, Integrations, open Mealie.
